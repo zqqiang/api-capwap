@@ -18,6 +18,7 @@ function toHeader(code) {
 
 function getNewMethod(type) {
     switch (type) {
+        case 'int8_t':
         case 'uint8_t':
         case 'uint16_t':
         case 'uint32_t':
@@ -36,8 +37,15 @@ function getNewMethod(type) {
 };
 
 function parseLine(line, context) {
+    // skip comment
+    let parts = line.match(/\s+\/\/\s+/);
+    if (parts) {
+        console.log('skip comments: ', parts);
+        return;
+    }
+
     // match typedef struct
-    let parts = line.match(/typedef\s+struct\s+(\w+)\s+{/);
+    parts = line.match(/typedef\s+struct\s+(\w+)\s+{/);
     if (parts) {
         context.type = parts[1];
         context.last = 'start';
@@ -131,9 +139,38 @@ let topInterface = [
     'vsp_dot11_sta_list',
     'vsp_vap_downup',
     'cw_sta_entry_add',
+    'cw_sta_entry_del',
+    'vsp_wds_sta',
+    'cw_wlan_entry',
+    'vsp_vap_psk_passwd',
+    'vsp_vap_radius_config',
+    'vsp_vap_wds',
+    'vsp_vap_whitelist',
+    'vsp_vap_ip_mask',
+    'vsp_wtp_split_tun',
+    'vsp_vap_mcast_rate',
+    'vsp_vap_sta_max_ap',
+    'vsp_vap_rates',
+    'vsp_vap_bc_suppression',
+    'vsp_vap_flags',
+    'vsp_vap_natip_mask',
+    'vsp_me_disable_thresh',
+    'vsp_prob_resp_suppress',
+    'vsp_vap_vlan_tag',
+    'vsp_ip_frag',
+    'vsp_dot11_ebp',
+    'vsp_dot11_aero_enable',
+    'vsp_dot11_aero_debug',
+    'vsp_dot11_fortipresence_params',
+    'vsp_mesh_eth_type',
+    'vsp_fiap_eth_type',
+    'vsp_sta_locate_reset',
+    'vsp_max_retransmit',
+    'vsp_lldp_enable',
 ];
 
 function addTopInterface() {
+    toHeader('\r\n');
     topInterface.forEach((intf, index) => {
         toSource('\r\nvoid build' + S('-' + intf).camelize().s + 'Json(struct json_object *params, const char *key, struct ' + intf + ' *' + intf + ') {\r\n');
         toSource('    json_object_object_add(params, key, build' + S('-' + intf).camelize().s + '(' + intf + '));\r\n}\r\n');
@@ -145,11 +182,22 @@ fs.readFile('./head.h', 'utf8', (err, data) => {
     if (err) throw err;
     let lines = data.match(/[^\r\n]+/g);
 
+    // erase cwJsonApi.c and cwJsonApi.h
+    [
+        'capwap/wtp/cwJsonApi.c',
+        'capwap/include/cwJsonApi.h'
+    ].forEach((file) => {
+        fs.writeFileSync(file, '\r\n', 'utf8', (err) => {
+            if (err) throw err;
+        });
+    });
+
     toSource('#include "cwJsonApi.h"\r\n');
+
     toHeader('#ifndef _CW_JSON_API_H\r\n');
-    toHeader('#define _CW_JSON_API_H\r\n');
+    toHeader('#define _CW_JSON_API_H\r\n\r\n');
     toHeader('#include "cw.h"\r\n');
-    toHeader('#include "cwWTP.h"\r\n');
+    toHeader('#include "cwWTP.h"\r\n\r\n');
 
     let context = {};
     lines.forEach((line, index) => {
@@ -157,5 +205,6 @@ fs.readFile('./head.h', 'utf8', (err, data) => {
     });
 
     addTopInterface();
-    toHeader('#endif /* _CW_JSON_API_H */\r\n');
+
+    toHeader('\r\n#endif /* _CW_JSON_API_H */\r\n');
 });
