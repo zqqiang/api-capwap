@@ -167,6 +167,48 @@ let topInterface = [
     'vsp_sta_locate_reset',
     'vsp_max_retransmit',
     'vsp_lldp_enable',
+    'vsp_dot11_aero_tag',
+    'vsp_dot11_aero_mu',
+    'vsp_dot11_fortipresence_enable',
+    'vsp_vap_bitmap',
+    'base_radio_admin_state',
+    'dot11_md_cap',
+    'dot11_wtp_radio_info',
+    'base_vsp_country_code',
+    'dot11_wtp_radio_cfg',
+    'vsp_dot11_ps_opt',
+    'vsp_dot11_tx_opt',
+    'vsp_dot11_protmode',
+    'vsp_dot11_amsdu',
+    'vsp_dot11_coext',
+    'vsp_dot11_pure',
+    'vsp_dot11_ht_cap',
+    'dot11_antenna',
+    'dot11_tx_pwr',
+    'dot11_dsss_ctl',
+    'dot11_ofdm_ctl',
+    'dot11_mac_oper',
+    'vsp_darrp_cfg',
+    'base_vsp_ap_scan',
+    'base_vsp_ap_scan_idle',
+    'base_vsp_ap_scan_passive',
+    'base_vsp_ap_scan_sniffer',
+    'base_vsp_sta_scan',
+    'vsp_fho_enable',
+    'vsp_apho_enable',
+    'vsp_sta_locate_cfg',
+    'vsp_txpwr_percentage',
+    'vsp_spectrum_analysis',
+    'vsp_wids_enable',
+    'vsp_wids_params_long_dur',
+    'vsp_wids_params_auth_time',
+    'vsp_wids_params_auth_thresh',
+    'vsp_wids_params_assoc_time',
+    'vsp_wids_params_assoc_thresh',
+    'vsp_wids_params_deauth_thresh',
+    'vsp_radio_sta_max',
+    'vsp_max_distance',
+    'vsp_vap_web_authserver',
 ];
 
 function addTopInterface() {
@@ -185,7 +227,7 @@ fs.readFile('./head.h', 'utf8', (err, data) => {
     // erase cwJsonApi.c and cwJsonApi.h
     [
         'capwap/wtp/cwJsonApi.c',
-        'capwap/include/cwJsonApi.h'
+        'capwap/include/cwJsonApi.h',
     ].forEach((file) => {
         fs.writeFileSync(file, '\r\n', 'utf8', (err) => {
             if (err) throw err;
@@ -197,7 +239,8 @@ fs.readFile('./head.h', 'utf8', (err, data) => {
     toHeader('#ifndef _CW_JSON_API_H\r\n');
     toHeader('#define _CW_JSON_API_H\r\n\r\n');
     toHeader('#include "cw.h"\r\n');
-    toHeader('#include "cwWTP.h"\r\n\r\n');
+    toHeader('#include "cwWTP.h"\r\n');
+    toHeader('#include "json.h"\r\n\r\n');
 
     let context = {};
     lines.forEach((line, index) => {
