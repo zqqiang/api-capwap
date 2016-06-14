@@ -69,6 +69,8 @@ function parseLine(line, context) {
                 toSource(context.indent + 'json_object_object_add(obj, "' + value + '", ' + getNewMethod(key) + '(' + context.type + '->' + value + '));\r\n');
             } else {
                 toSource(context.indent + 'struct json_object *obj = json_object_new_object();\r\n');
+                toSource(context.indent + 'if (' + context.type + ') {\r\n');
+                context.indent = '        ';
                 toSource(context.indent + 'json_object_object_add(obj, "' + value + '", ' + getNewMethod(key) + '(' + context.type + '->' + value + '));\r\n');
             }
         } else {
@@ -92,6 +94,8 @@ function parseLine(line, context) {
                 toSource(context.indent + 'json_object_object_add(obj, "' + value + '", ' + getNewMethod(key) + '(' + context.type + '->' + value + '));\r\n');
             } else {
                 toSource(context.indent + 'struct json_object *obj = json_object_new_object();\r\n');
+                toSource(context.indent + 'if (' + context.type + ') {\r\n');
+                context.indent = '        ';                
                 toSource(context.indent + 'json_object_object_add(obj, "' + value + '", ' + getNewMethod(key) + '(' + context.type + '->' + value + '));\r\n');
             }
         } else if ('next' === value) {
@@ -123,6 +127,8 @@ function parseLine(line, context) {
         if ('next' === context.last) {
             toSource(context.indent + 'return array;\r\n');
         } else {
+            context.indent = '    ';
+            toSource(context.indent + '}\r\n');
             toSource(context.indent + 'return obj;\r\n');
         }
         context.indent = '';
