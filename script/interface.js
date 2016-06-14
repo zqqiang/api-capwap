@@ -116,6 +116,8 @@ function parseLine(line, context) {
         let value = parts[1];
         if ('start' === context.last) {
             toSource(context.indent + 'struct json_object *obj = json_object_new_object();\r\n');
+            toSource(context.indent + 'if (' + context.type + ') {\r\n');
+            context.indent = '        ';
         }
         toSource(context.indent + 'json_object_object_add(obj, "' + value + '", json_object_new_int(' + context.type + '->' + value + '));\r\n');
         context.last = 'bitset';
