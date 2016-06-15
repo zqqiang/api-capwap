@@ -71,14 +71,21 @@ function parseLine(line, context) {
     // match macAddr[ETH_ALEN]
     parts = line.match(/\s+(\w+)\s+macAddr\[ETH_ALEN\];/);
     if (parts) {
-        toSource(context.indent + 'json_object_object_add(obj, "macAddr", buildArray(' + context.type + '->macAddr, ETH_ALEN));\r\n');
+        if ('start' === context.last) {
+            toSource(context.indent + 'struct json_object *obj = json_object_new_object();\r\n');
+            toSource(context.indent + 'if (' + context.type + ') {\r\n');
+            context.indent = '        ';
+            toSource(context.indent + 'json_object_object_add(obj, "macAddr", buildArray(' + context.type + '->macAddr, ETH_ALEN));\r\n');
+        } else {
+            toSource(context.indent + 'json_object_object_add(obj, "macAddr", buildArray(' + context.type + '->macAddr, ETH_ALEN));\r\n');
+        }
         context.last = 'attribute';
     }
 
     // match key[CW_KEY_LEN_MAX]
     parts = line.match(/\s+(\w+)\s+key\[CW_KEY_LEN_MAX\];/);
     if (parts) {
-        toSource(context.indent + 'json_object_object_add(obj, "key", buildArray(' + context.type + '->key, CW_KEY_LEN_MAX));\r\n');
+        toSource(context.indent + 'json_object_object_add(obj, "key", buildArray(' + context.type + '->key, ' + context.type + '->kLen));\r\n');
         context.last = 'attribute';
     }
 
@@ -97,7 +104,13 @@ function parseLine(line, context) {
                 toSource(context.indent + 'json_object_object_add(obj, "' + value + '", buildArray(' + context.type + '->' + value + ', ' + context.type + '->kLen));\r\n');
             }
         } else {
-            toSource(context.indent + 'json_object_object_add(obj, "' + value + '", buildArray(' + context.type + '->' + value + ', ' + len + '));\r\n');
+            if ('sn' === value) {
+                toSource(context.indent + 'json_object_object_add(obj, "' + value + '", json_object_new_string(' + context.type + '->' + value + '));\r\n');
+            } else if ('slct' === value) {
+                toSource(context.indent + 'json_object_object_add(obj, "' + value + '", buildArray(' + context.type + '->' + value + ', ' + context.type + '->cnt));\r\n');
+            } else {
+                toSource(context.indent + 'json_object_object_add(obj, "' + value + '", buildArray(' + context.type + '->' + value + ', ' + len + '));\r\n');
+            }
         }
         context.last = 'attribute';
     }
