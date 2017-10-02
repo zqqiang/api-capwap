@@ -133,7 +133,7 @@ LDFLAGS = \
 endif
 
 
-SYSLIBS = $(COVERAGE_SYSLIBS) $(EXTRA_SYSLIBS) -ljemalloc -lcrypt -lc -ldl -lresolv -lmysqlclient -L/usr/lib64/mysql
+SYSLIBS = $(COVERAGE_SYSLIBS) $(EXTRA_SYSLIBS) -lcrypt -lc -ldl -lresolv -lmysqlclient -L/usr/lib64/mysql
 
 TOPLIBDIR=$(TOPDIR)/lib
 TOPOBJDIR=$(TOPDIR)/obj
