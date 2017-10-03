@@ -1,16 +1,13 @@
 TOPDIR = ../..
 
-EXTRA_CFLAGS = -I.
-
-EXTRA_CFLAGS += -DCW_LINUX -I../os/unix
-
 OBJS = cw.o cw_log.o
-TARGET_PROG = core
-TARGET_PROG_OBJECTS = $(OBJS)
+EXTRA_CFLAGS = -I. -I../os/unix
+TARGET_O_CP = libcore.o
+OBJECTS_O = $(OBJS)
 
-all: $(TARGET_PROG)
+all: $(TARGET_O_CP)
 
 clean:
-	-rm -rf *.o *.a *~ core .deps $(TARGET_PROG)
+	-rm -rf *.o *.a *~ $(TARGET_O_CP) .deps
 
 include $(TOPDIR)/rules.Make
