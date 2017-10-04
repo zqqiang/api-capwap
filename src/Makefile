@@ -1,16 +1,16 @@
 TOPDIR = ..
 
-SUBDIRS = core event os
+SUBDIRS = core event os/unix
 
 EXTRA_CFLAGS = -I./core -I./os/unix
 
-OBJS = core/libcore.o os/libos.o
-TARGET_PROG = cw
+OBJS = core/libcore.o os/unix/libunix.o
+TARGET_PROG = capwap
 TARGET_PROG_OBJECTS=$(OBJS)
 
 all: $(SUBDIRS) $(TARGET_PROG)
 
 clean: subdirs
-	@-rm -rf *.o *.a *~ .deps cw
+	@-rm -rf *.o *.a *~ .deps $(TARGET_PROG)
 
 include $(TOPDIR)/rules.Make

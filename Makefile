@@ -5,7 +5,7 @@ SUBDIRS:=src demo
 all: subdirs
 
 clean: subdirs
-	@-rm -f *.o *.a *~ apsimg.out lib/* obj/*
+	@-rm -rf *.o *.a *~ apsimg.out lib/* obj
 
 .PHONY: all
 
