@@ -1,4 +1,3 @@
 .deps/
 *.o
-src/core/core
-demo/demo
+src/capwap
