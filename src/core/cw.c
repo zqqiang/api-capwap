@@ -4,6 +4,10 @@
 int cw_cdecl
 main(int argc, char *const *argv)
 {
-    cw_master_process_cycle(/* cycle */);
+    if (cw_init_signals() != CW_OK) {
+        return 1;
+    }
+
+    cw_master_process_cycle();
     return 0;
 }

@@ -1,7 +1,7 @@
 TOPDIR = ../..
 
 OBJS = cw.o cw_log.o
-EXTRA_CFLAGS = -I. -I../os/unix
+EXTRA_CFLAGS = -DCW_LINUX -I. -I../os/unix
 TARGET_O_CP = libcore.o
 OBJECTS_O = $(OBJS)
 

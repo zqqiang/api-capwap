@@ -1,6 +1,6 @@
 TOPDIR=.
 
-SUBDIRS:=src demo
+SUBDIRS:=src
 
 all: subdirs
 
