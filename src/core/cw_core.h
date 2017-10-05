@@ -20,7 +20,8 @@ typedef struct cw_log_s cw_log_t;
 #include <cw_process.h>
 #include <cw_process_cycle.h>
 #include <cw_cycle.h>
-#include <cw_log.h>
+#include <cw_rbtree.h>
+#include <cw_time.h>
 
 #define cw_abs(value)       (((value) >= 0) ? (value) : - (value))
 #define cw_max(val1, val2)  ((val1 < val2) ? (val2) : (val1))

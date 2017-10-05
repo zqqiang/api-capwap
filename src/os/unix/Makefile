@@ -1,6 +1,6 @@
 TOPDIR = ../../..
 
-OBJS = cw_process_cycle.o cw_process.o
+OBJS = cw_process_cycle.o cw_process.o cw_thread_id.o
 EXTRA_CFLAGS = -I. -I../../core -DCW_LINUX
 TARGET_O_CP = libunix.o
 OBJECTS_O = $(OBJS)

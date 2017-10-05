@@ -3,6 +3,7 @@
 
 static void cw_master_process_exit();
 
+cw_pid_t     cw_pid;
 
 sig_atomic_t  cw_terminate;
 sig_atomic_t  cw_quit;
@@ -17,8 +18,6 @@ void cw_master_process_cycle(cw_cycle_t *cycle)
     sigemptyset(&set);
 
     for ( ;; ) {
-
-        cw_log_debug0(CW_LOG_DEBUG_EVENT, cycle->log, 0, "sigsuspend");
 
         sigsuspend(&set);
 
