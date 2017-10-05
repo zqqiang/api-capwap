@@ -16,7 +16,7 @@ cw_signal_t  signals[] = {
 };
 
 cw_int_t
-cw_init_signals()
+cw_init_signals(zlog_category_t *log)
 {
     cw_signal_t *sig;
     struct sigaction sa;
@@ -34,7 +34,7 @@ cw_init_signals()
         sigemptyset(&sa.sa_mask);
 
         if (sigaction(sig->signo, &sa, NULL) == -1) {
-            printf("sigaction(%s) failed\n", sig->signame);
+            cw_log_error(log, "sigaction(%s) failed", sig->signame);
             return CW_ERROR;
         }
     }
@@ -66,8 +66,8 @@ cw_signal_handler(int signo, siginfo_t *siginfo, void *ucontext)
     }
 
     if (siginfo && siginfo->si_pid) {
-        printf("signal %d (%s) received from %d%s\n", signo, sig->signame, siginfo->si_pid, action);
+        cw_log_notice(cw_cycle->log, "signal %d (%s) received from %d%s", signo, sig->signame, siginfo->si_pid, action);
     } else {
-        printf("signal %d (%s) received%s\n", signo, sig->signame, action);
+        cw_log_notice(cw_cycle->log, "signal %d (%s) received%s", signo, sig->signame, action);
     }
 }

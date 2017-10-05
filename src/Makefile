@@ -3,6 +3,7 @@ TOPDIR = ..
 SUBDIRS = core event os/unix
 
 EXTRA_CFLAGS = -I./core -I./os/unix
+EXTRA_SYSLIBS = -lzlog
 
 OBJS = core/libcore.o os/unix/libunix.o
 TARGET_PROG = capwap

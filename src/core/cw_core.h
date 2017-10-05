@@ -4,7 +4,6 @@
 #include <cw_config.h>
 
 typedef struct cw_cycle_s cw_cycle_t;
-typedef struct cw_log_s cw_log_t;
 
 #define  CW_OK          0
 #define  CW_ERROR      -1
@@ -22,6 +21,8 @@ typedef struct cw_log_s cw_log_t;
 #include <cw_cycle.h>
 #include <cw_rbtree.h>
 #include <cw_time.h>
+#include <cw_zlog.h>
+#include <cw_log.h>
 
 #define cw_abs(value)       (((value) >= 0) ? (value) : - (value))
 #define cw_max(val1, val2)  ((val1 < val2) ? (val2) : (val1))

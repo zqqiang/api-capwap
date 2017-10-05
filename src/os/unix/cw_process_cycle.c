@@ -13,25 +13,27 @@ void cw_master_process_cycle(cw_cycle_t *cycle)
     sigset_t set;
     cw_uint_t live = 1;
 
-    printf("master process start!\n");
+    cw_log_info(cycle->log, "master process start!");
 
     sigemptyset(&set);
 
     for ( ;; ) {
 
+        cw_log_debug(cycle->log, "sigsuspend");
+
         sigsuspend(&set);
 
         if (!live && (cw_terminate || cw_quit)) {
-            cw_master_process_exit();
+            cw_master_process_exit(cycle);
         }
 
         if (cw_terminate) {
-            printf("%s\n", "do something terminate...");
+            cw_log_info(cycle->log, "do something terminate...");
             continue;
         }
 
         if (cw_quit) {
-            printf("%s\n", "do something quit...");
+            cw_log_info(cycle->log, "do something quit...");
             continue;
         }
 
@@ -39,9 +41,14 @@ void cw_master_process_cycle(cw_cycle_t *cycle)
 }
 
 static void
-cw_master_process_exit()
+cw_master_process_exit(cw_cycle_t *cycle)
 {
-    printf("%s\n", "master process exit");
+    cw_log_info(cycle->log, "master process exit");
+
+    zlog_fini();
+
+    free(cycle);
+    cycle = NULL;
 
     exit(0);
 }

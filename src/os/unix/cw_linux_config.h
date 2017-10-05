@@ -45,4 +45,6 @@
 
 #include <sys/syscall.h>
 
+#include <zlog.h>
+
 #endif /* _CW_LINUX_CONFIG_H_INCLUDED_ */

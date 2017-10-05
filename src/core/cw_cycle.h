@@ -6,10 +6,12 @@
 
 struct cw_cycle_s {
 
-    cw_log_t *log;
+    zlog_category_t *log;
 
 };
 
 cw_cycle_t *cw_init_cycle(cw_cycle_t *old_cycle);
+
+extern volatile cw_cycle_t  *cw_cycle;
 
 #endif /* _CW_CYCLE_H_INCLUDED_ */
