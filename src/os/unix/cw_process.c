@@ -45,5 +45,29 @@ cw_init_signals()
 static void
 cw_signal_handler(int signo, siginfo_t *siginfo, void *ucontext)
 {
-    printf("%s\n", __FUNCTION__);
+    char *action = "";
+    cw_signal_t *sig = NULL;
+
+    for (sig = signals; sig->signo != 0; sig++) {
+        if (sig->signo == signo) {
+            break;
+        }
+    }
+
+    switch(signo) {
+        case SIGQUIT:
+            cw_quit = 1;
+            action = ", shutting down";
+            break;
+        case SIGTERM:
+            cw_terminate = 2;
+            action = ", exiting";
+            break;
+    }
+
+    if (siginfo && siginfo->si_pid) {
+        printf("signal %d (%s) received from %d%s\n", signo, sig->signame, siginfo->si_pid, action);
+    } else {
+        printf("signal %d (%s) received%s\n", signo, sig->signame, action);
+    }
 }

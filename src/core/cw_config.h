@@ -8,5 +8,6 @@
 #define cw_cdecl
 
 typedef intptr_t cw_int_t;
+typedef uintptr_t cw_uint_t;
 
 #endif /* _CW_CONFIG_H_INCLUDED_ */
