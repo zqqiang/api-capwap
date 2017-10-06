@@ -9,7 +9,7 @@ typedef pid_t cw_pid_t;
 #define cw_log_pid  cw_pid
 #endif
 
-cw_int_t cw_init_signals();
+cw_int_t cw_init_signals(cw_log_t *log);
 
 extern cw_pid_t cw_pid;
 

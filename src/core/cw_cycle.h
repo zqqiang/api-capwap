@@ -6,7 +6,7 @@
 
 struct cw_cycle_s {
 
-    zlog_category_t *log;
+    cw_log_t *log;
 
 };
 

@@ -13,8 +13,6 @@ void cw_master_process_cycle(cw_cycle_t *cycle)
     sigset_t set;
     cw_uint_t live = 1;
 
-    cw_log_info(cycle->log, "master process start!");
-
     sigemptyset(&set);
 
     for ( ;; ) {
@@ -45,7 +43,7 @@ cw_master_process_exit(cw_cycle_t *cycle)
 {
     cw_log_info(cycle->log, "master process exit");
 
-    zlog_fini();
+    cw_log_fini();
 
     free(cycle);
     cycle = NULL;

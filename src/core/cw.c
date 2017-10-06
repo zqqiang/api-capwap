@@ -4,12 +4,13 @@
 int cw_cdecl
 main(int argc, char *const *argv)
 {
-    zlog_category_t *log = NULL;
+    cw_log_t *log = NULL;
     cw_cycle_t *cycle = NULL, init_cycle = {0};
 
     cw_pid = cw_getpid();
 
-    if (cw_log_init(&log) != CW_OK) {
+    log = cw_log_init();
+    if (log == NULL) {
         return 1;
     }
 
@@ -28,5 +29,6 @@ main(int argc, char *const *argv)
     }
 
     cw_master_process_cycle(cycle);
+
     return CW_OK;
 }

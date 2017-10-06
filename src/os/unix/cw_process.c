@@ -16,7 +16,7 @@ cw_signal_t  signals[] = {
 };
 
 cw_int_t
-cw_init_signals(zlog_category_t *log)
+cw_init_signals(cw_log_t *log)
 {
     cw_signal_t *sig;
     struct sigaction sa;
