@@ -71,3 +71,12 @@ cw_signal_handler(int signo, siginfo_t *siginfo, void *ucontext)
         cw_log_notice(cw_cycle->log, "signal %d (%s) received%s", signo, sig->signame, action);
     }
 }
+
+cw_pid_t
+cw_spawn_process(cw_cycle_t *cycle, cw_spawn_proc_pt proc, void *data,
+    char *name, cw_int_t respawn)
+{
+    cw_pid_t pid = {0};
+
+    return pid;
+}

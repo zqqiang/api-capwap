@@ -1,6 +1,8 @@
 #include <cw_config.h>
 #include <cw_core.h>
 
+static void cw_start_worker_processes(cw_cycle_t *cycle, cw_int_t n, cw_int_t type);
+static void cw_worker_process_cycle(cw_cycle_t *cycle, void *data);
 static void cw_master_process_exit();
 
 cw_pid_t     cw_pid;
@@ -12,8 +14,11 @@ void cw_master_process_cycle(cw_cycle_t *cycle)
 {
     sigset_t set;
     cw_uint_t live = 1;
+    // cw_core_conf_t *ccf = NULL;
 
     sigemptyset(&set);
+
+    cw_start_worker_processes(cycle, /* ccf->worker_processes */ 1, CW_PROCESS_RESPAWN);
 
     for ( ;; ) {
 
@@ -49,4 +54,23 @@ cw_master_process_exit(cw_cycle_t *cycle)
     cycle = NULL;
 
     exit(0);
+}
+
+static void
+cw_start_worker_processes(cw_cycle_t *cycle, cw_int_t n, cw_int_t type)
+{
+    cw_int_t i = 0;
+
+    cw_log_notice(cycle->log, "start worker processes");
+
+    for (i = 0; i < n; ++i) {
+        cw_spawn_process(cycle, cw_worker_process_cycle, 
+            (void *)(intptr_t)i, "worker process", type);
+    }
+}
+
+static void
+cw_worker_process_cycle(cw_cycle_t *cycle, void *data)
+{
+
 }

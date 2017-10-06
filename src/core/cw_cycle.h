@@ -10,6 +10,12 @@ struct cw_cycle_s {
 
 };
 
+typedef struct {
+
+    cw_int_t worker_processes;
+
+} cw_core_conf_t;
+
 cw_cycle_t *cw_init_cycle(cw_cycle_t *old_cycle);
 
 extern volatile cw_cycle_t  *cw_cycle;
