@@ -1,9 +1,30 @@
 #ifndef _CW_PROCESS_H_INCLUDED_
 #define _CW_PROCESS_H_INCLUDED_
 
+#include <cw_config.h>
+#include <cw_core.h>
+
 typedef pid_t cw_pid_t;
 
+#define CW_INVALID_PID  -1
+
 typedef void (*cw_spawn_proc_pt) (cw_cycle_t *cycle, void *data);
+
+typedef struct {
+    cw_pid_t            pid;
+    int                 status;
+    cw_socket_t         channel[2];
+
+    cw_spawn_proc_pt    proc;
+    void               *data;
+    char               *name;
+
+    unsigned            respawn:1;
+    unsigned            just_spawn:1;
+    unsigned            detached:1;
+    unsigned            exiting:1;
+    unsigned            exited:1;
+} cw_process_t;
 
 #define cw_getpid getpid
 
