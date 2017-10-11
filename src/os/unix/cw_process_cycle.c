@@ -72,5 +72,22 @@ cw_start_worker_processes(cw_cycle_t *cycle, cw_int_t n, cw_int_t type)
 static void
 cw_worker_process_cycle(cw_cycle_t *cycle, void *data)
 {
+    cw_int_t worker = (intptr_t) data;
+
+    for ( ;; ) {
+        cw_log_notice(cycle->log, "worker cycle");
+
+        cw_process_events_and_timers(cycle);
+
+        if (cw_terminate) {
+            cw_log_notice(cycle->log, "exiting");
+            cw_worker_process_exit(cycle);
+        }
+    }
+}
+
+static void
+cw_worker_process_exit(cw_cycle_t *cycle)
+{
 
 }
