@@ -17,6 +17,10 @@ main(int argc, char *const *argv)
     init_cycle.log = log;
     cw_cycle = &init_cycle;
 
+    if (cw_preinit_modules() != CW_OK) {
+        return 1;
+    }
+
     cycle = cw_init_cycle(&init_cycle);
     if (NULL == cycle) {
         return 1;

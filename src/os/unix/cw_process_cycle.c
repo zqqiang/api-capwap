@@ -74,6 +74,8 @@ cw_worker_process_cycle(cw_cycle_t *cycle, void *data)
 {
     cw_int_t worker = (intptr_t) data;
 
+    cw_worker_process_init(cycle, worker);
+
     for ( ;; ) {
         cw_log_notice(cycle->log, "worker cycle");
 
@@ -90,4 +92,19 @@ static void
 cw_worker_process_exit(cw_cycle_t *cycle)
 {
 
+}
+
+static void
+cw_worker_process_init(cw_cycle_t *cycle, cw_int_t worker)
+{
+    cw_uint_t i = 0;
+
+    for (i = 0; cycle->modules[i]; i++) {
+        if (cycle->modules[i]->init_process) {
+            if (cycle->modules[i]->init_process(cycle) == NGX_ERROR) {
+                /* fatal */
+                exit(2);
+            }
+        }
+    }
 }
