@@ -1,11 +1,11 @@
 TOPDIR=.
 
-SUBDIRS:=src
+SUBDIRS:=obj src
 
 all: subdirs
 
 clean: subdirs
-	@-rm -rf *.o *.a *~ apsimg.out lib/* obj
+	@-rm -rf *.o *.a *~ apsimg.out lib/*
 
 .PHONY: all
 

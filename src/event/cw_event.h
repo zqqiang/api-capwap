@@ -4,6 +4,10 @@
 #include <cw_config.h>
 #include <cw_core.h>
 
+struct ngx_event_s {
+
+};
+
 typedef struct {
     cw_int_t  (*add)(cw_event_t *ev, cw_int_t event, cw_uint_t flags);
     cw_int_t  (*del)(cw_event_t *ev, cw_int_t event, cw_uint_t flags);

@@ -1,4 +1,7 @@
+#include <cw_config.h>
+#include <cw_core.h>
 
+#define CW_MAX_DYNAMIC_MODULES  128
 
 cw_uint_t         cw_max_module;
 static cw_uint_t  cw_modules_n;

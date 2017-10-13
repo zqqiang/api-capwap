@@ -3,8 +3,16 @@
 
 #include <cw_config.h>
 
+typedef struct cw_module_s cw_module_t;
 typedef struct cw_cycle_s cw_cycle_t;
 typedef struct cw_log_s cw_log_t;
+typedef struct cw_pool_s cw_pool_t;
+typedef struct cw_command_s cw_command_t;
+typedef struct cw_event_s cw_event_t;
+typedef struct cw_connection_s cw_connection_t;
+
+typedef void (*cw_event_handler_pt)(cw_event_t *ev);
+typedef void (*cw_connection_handler_pt)(cw_connection_t *c);
 
 #define  CW_OK          0
 #define  CW_ERROR      -1
@@ -26,6 +34,9 @@ typedef struct cw_log_s cw_log_t;
 #include <cw_log.h>
 #include <cw_file.h>
 #include <cw_channel.h>
+#include <cw_module.h>
+#include <cw_connection.h>
+#include <cw_palloc.h>
 
 #define cw_abs(value)       (((value) >= 0) ? (value) : - (value))
 #define cw_max(val1, val2)  ((val1 < val2) ? (val2) : (val1))

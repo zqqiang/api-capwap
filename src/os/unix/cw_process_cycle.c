@@ -1,9 +1,13 @@
 #include <cw_config.h>
 #include <cw_core.h>
+#include <cw_event.h>
+#include <cw_channel.h>
 
 static void cw_start_worker_processes(cw_cycle_t *cycle, cw_int_t n, cw_int_t type);
 static void cw_worker_process_cycle(cw_cycle_t *cycle, void *data);
 static void cw_master_process_exit();
+static void cw_worker_process_init(cw_cycle_t *cycle, cw_int_t worker);
+static void cw_worker_process_exit(cw_cycle_t *cycle);
 
 cw_pid_t     cw_pid;
 
@@ -18,7 +22,7 @@ void cw_master_process_cycle(cw_cycle_t *cycle)
 
     sigemptyset(&set);
 
-    cw_start_worker_processes(cycle, /* ccf->worker_processes */ 1, CW_PROCESS_RESPAWN);
+    cw_start_worker_processes(cycle, /* ccf->worker_processes */ 2, CW_PROCESS_RESPAWN);
 
     for ( ;; ) {
 
@@ -101,7 +105,7 @@ cw_worker_process_init(cw_cycle_t *cycle, cw_int_t worker)
 
     for (i = 0; cycle->modules[i]; i++) {
         if (cycle->modules[i]->init_process) {
-            if (cycle->modules[i]->init_process(cycle) == NGX_ERROR) {
+            if (cycle->modules[i]->init_process(cycle) == CW_ERROR) {
                 /* fatal */
                 exit(2);
             }

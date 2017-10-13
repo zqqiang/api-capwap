@@ -1,7 +1,7 @@
 TOPDIR = ../..
 
-OBJS = cw.o cw_string.o cw_cycle.o cw_log.o
-EXTRA_CFLAGS = -DCW_LINUX -I. -I../os/unix
+OBJS = cw.o cw_string.o cw_cycle.o cw_log.o cw_module.o cw_connection.o cw_palloc.o
+EXTRA_CFLAGS = -DCW_LINUX -I. -I../os/unix -I../event
 TARGET_O_CP = libcore.o
 OBJECTS_O = $(OBJS)
 

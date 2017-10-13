@@ -16,5 +16,13 @@ cw_init_cycle(cw_cycle_t *old_cycle)
         return NULL;
     }
 
+    if (cw_open_listening_sockets(cycle) != CW_OK) {
+        goto failed;
+    }
+
     return cycle;
+
+failed:
+
+    return NULL;
 }

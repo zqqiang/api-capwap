@@ -6,7 +6,12 @@
 
 struct cw_cycle_s {
 
+    cw_pool_t *pool;
+
     cw_log_t *log;
+
+    cw_module_t **modules;
+    cw_uint_t modules_n;
 
 };
 
