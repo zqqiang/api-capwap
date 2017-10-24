@@ -13,6 +13,8 @@ struct cw_cycle_s {
     cw_module_t **modules;
     cw_uint_t modules_n;
 
+    cw_array_t listening;
+
 };
 
 typedef struct {

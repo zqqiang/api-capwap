@@ -28,7 +28,6 @@ typedef void (*cw_connection_handler_pt)(cw_connection_t *c);
 #include <cw_socket.h>
 #include <cw_process.h>
 #include <cw_process_cycle.h>
-#include <cw_cycle.h>
 #include <cw_rbtree.h>
 #include <cw_time.h>
 #include <cw_log.h>
@@ -37,6 +36,8 @@ typedef void (*cw_connection_handler_pt)(cw_connection_t *c);
 #include <cw_module.h>
 #include <cw_connection.h>
 #include <cw_palloc.h>
+#include <cw_array.h>
+#include <cw_cycle.h>
 
 #define cw_abs(value)       (((value) >= 0) ? (value) : - (value))
 #define cw_max(val1, val2)  ((val1 < val2) ? (val2) : (val1))
