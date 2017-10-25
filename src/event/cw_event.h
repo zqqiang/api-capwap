@@ -26,6 +26,8 @@ typedef struct {
     void       (*done)(cw_cycle_t *cycle);
 } cw_event_actions_t;
 
+
+
 extern cw_event_actions_t   cw_event_actions;
 
 #define cw_process_events   cw_event_actions.process_events

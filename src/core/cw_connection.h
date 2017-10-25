@@ -6,12 +6,17 @@
 
 typedef struct cw_listening_s  cw_listening_t;
 
-struct ngx_listening_s {
+struct cw_listening_s {
     cw_socket_t        fd;
 
     struct sockaddr    *sockaddr;
     socklen_t           socklen;    /* size of sockaddr */
+    size_t              addr_text_max_len;
+    cw_str_t           addr_text;
 
+    int                 type;
+
+    int                 backlog;
 
     unsigned            open:1;
     unsigned            remain:1;
@@ -35,7 +40,7 @@ struct ngx_listening_s {
     unsigned            add_deferred:1;
 };
 
-struct ngx_connection_s {
+struct cw_connection_s {
 
 };
 

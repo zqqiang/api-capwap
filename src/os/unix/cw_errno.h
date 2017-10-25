@@ -6,4 +6,8 @@
 
 typedef int cw_err_t;
 
+#define CW_EADDRINUSE    EADDRINUSE
+
+#define cw_socket_errno           errno
+
 #endif /* _CW_ERROR_H_INCLUDED_ */

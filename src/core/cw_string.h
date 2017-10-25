@@ -21,4 +21,6 @@ typedef struct {
 #define cw_cpymem(dst, src, n)   (((u_char *) memcpy(dst, src, n)) + (n))
 
 
+#define cw_string_format(str) ((int)str.len), (str.data)
+
 #endif /* _CW_STRING_H_INCLUDED_ */
