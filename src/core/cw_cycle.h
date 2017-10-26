@@ -5,7 +5,7 @@
 #include <cw_core.h>
 
 struct cw_cycle_s {
-
+    void                  ****conf_ctx;
     cw_pool_t *pool;
 
     cw_log_t *log;

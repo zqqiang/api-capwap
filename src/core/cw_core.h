@@ -4,6 +4,7 @@
 #include <cw_config.h>
 
 typedef struct cw_module_s cw_module_t;
+typedef struct cw_conf_s cw_conf_t;
 typedef struct cw_cycle_s cw_cycle_t;
 typedef struct cw_log_s cw_log_t;
 typedef struct cw_pool_s cw_pool_t;
@@ -38,6 +39,7 @@ typedef void (*cw_connection_handler_pt)(cw_connection_t *c);
 #include <cw_palloc.h>
 #include <cw_array.h>
 #include <cw_cycle.h>
+#include <cw_conf_file.h>
 
 #define cw_abs(value)       (((value) >= 0) ? (value) : - (value))
 #define cw_max(val1, val2)  ((val1 < val2) ? (val2) : (val1))

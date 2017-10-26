@@ -3,6 +3,17 @@
 
 #include <cw_config.h>
 #include <cw_core.h>
+#include <cw.h>
+
+#define CW_MODULE_UNSET_INDEX  (cw_uint_t) -1
+
+#define CW_MODULE_SIGNATURE "" //todo:
+
+#define CW_MODULE_V1                                                         \
+    CW_MODULE_UNSET_INDEX, CW_MODULE_UNSET_INDEX,                           \
+    NULL, 0, 0, cw_version, CW_MODULE_SIGNATURE
+
+#define CW_MODULE_V1_PADDING  0, 0, 0, 0, 0, 0, 0, 0
 
 struct cw_module_s {
     cw_uint_t            ctx_index;
@@ -40,6 +51,12 @@ struct cw_module_s {
     uintptr_t             spare_hook6;
     uintptr_t             spare_hook7;
 };
+
+typedef struct {
+    cw_str_t             name;
+    void               *(*create_conf)(cw_cycle_t *cycle);
+    char               *(*init_conf)(cw_cycle_t *cycle, void *conf);
+} cw_core_module_t;
 
 cw_int_t cw_preinit_modules(void);
 cw_int_t cw_cycle_modules(cw_cycle_t *cycle);
