@@ -4,6 +4,12 @@
 #include <cw_config.h>
 #include <cw_core.h>
 
+#define CW_CONF_NOARGS      0x00000001
+
+#define CW_CONF_BLOCK       0x00000100
+
+#define CW_MAIN_CONF        0x01000000
+
 #define CW_CONF_OK          NULL
 #define CW_CONF_ERROR       (void *) -1
 
@@ -18,6 +24,8 @@ struct cw_command_s {
     cw_uint_t            offset;
     void                 *post;
 };
+
+#define cw_null_command  { cw_null_string, 0, NULL, 0, 0, NULL }
 
 struct cw_conf_s {
     // char                 *name;

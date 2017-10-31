@@ -11,7 +11,7 @@ cw_init_cycle(cw_cycle_t *old_cycle)
     cw_cycle_t *cycle = NULL;
     cw_core_module_t   *module;
 
-    cycle = malloc(sizeof(cw_cycle_t)); // todo: suppor memory pool
+    cycle = malloc(sizeof(cw_cycle_t)); // todo: supper memory pool
 
     cycle->log = old_cycle->log;
 
