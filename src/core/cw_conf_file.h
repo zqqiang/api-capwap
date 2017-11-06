@@ -32,10 +32,10 @@ struct cw_conf_s {
     // cw_array_t          *args;
 
     // cw_cycle_t          *cycle;
-    // cw_pool_t           *pool;
+    cw_pool_t           *pool;
     // cw_pool_t           *temp_pool;
     // cw_conf_file_t      *conf_file;
-    // cw_log_t            *log;
+    cw_log_t            *log;
 
     // void                 *ctx;
     // cw_uint_t            module_type;

@@ -36,6 +36,7 @@ typedef void (*cw_connection_handler_pt)(cw_connection_t *c);
 #include <cw_channel.h>
 #include <cw_module.h>
 #include <cw_connection.h>
+#include <cw_alloc.h>
 #include <cw_palloc.h>
 #include <cw_array.h>
 #include <cw_cycle.h>

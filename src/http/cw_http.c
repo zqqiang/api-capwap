@@ -42,6 +42,18 @@ cw_module_t  cw_http_module = {
 static char *
 cw_http_block(cw_conf_t *cf, cw_command_t *cmd, void *conf)
 {
+    cw_http_conf_ctx_t         *ctx;
+
+    if (*(cw_http_conf_ctx_t**)conf) {
+        return "is duplicate";
+    }
+
+    ctx = cw_pcalloc(cf->pool, sizeof(cw_http_conf_ctx_t));
+    if (ctx == NULL) {
+        return CW_CONF_ERROR;
+    }
+
+    *(cw_http_conf_ctx_t **) conf = ctx;
 
     return CW_CONF_OK;
 }
