@@ -8,11 +8,26 @@ cw_init_cycle(cw_cycle_t *old_cycle)
 {
     void                *rv;
     cw_uint_t           i = 0;
+    cw_log_t           *log;
     cw_cycle_t *cycle = NULL;
+    cw_pool_t          *pool;
     cw_core_module_t   *module;
 
-    cycle = malloc(sizeof(cw_cycle_t)); // todo: supper memory pool
+    log = old_cycle->log;
 
+    pool = cw_create_pool(CW_CYCLE_POOL_SIZE, log);
+    if (pool == NULL) {
+        return NULL;
+    }
+    pool->log = log;
+
+    cycle = cw_pcalloc(pool, sizeof(cw_cycle_t));
+    if (cycle == NULL) {
+        cw_destroy_pool(pool);
+        return NULL;
+    }
+
+    cycle->pool = pool;
     cycle->log = old_cycle->log;
 
     if (cw_cycle_modules(cycle) != CW_OK) {

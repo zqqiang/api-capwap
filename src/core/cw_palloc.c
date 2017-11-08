@@ -6,6 +6,83 @@ cw_palloc_small(cw_pool_t *pool, size_t size, cw_uint_t align);
 static void *cw_palloc_block(cw_pool_t *pool, size_t size);
 static void *cw_palloc_large(cw_pool_t *pool, size_t size);
 
+cw_pool_t *
+cw_create_pool(size_t size, cw_log_t *log)
+{
+    cw_pool_t  *p;
+
+    p = cw_memalign(CW_POOL_ALIGNMENT, size, log);
+    if (p == NULL) {
+        return NULL;
+    }
+
+    p->d.last = (u_char *) p + sizeof(cw_pool_t);
+    p->d.end = (u_char *) p + size;
+    p->d.next = NULL;
+    p->d.failed = 0;
+
+    size = size - sizeof(cw_pool_t);
+    p->max = (size < CW_MAX_ALLOC_FROM_POOL) ? size : CW_MAX_ALLOC_FROM_POOL;
+
+    p->current = p;
+    p->chain = NULL;
+    p->large = NULL;
+    p->cleanup = NULL;
+    p->log = log;
+
+    return p;
+}
+
+void
+cw_destroy_pool(cw_pool_t *pool)
+{
+    cw_pool_t          *p, *n;
+    cw_pool_large_t    *l;
+    cw_pool_cleanup_t  *c;
+
+    for (c = pool->cleanup; c; c = c->next) {
+        if (c->handler) {
+            cw_log_debug(pool->log, "run cleanup: %p", c);
+            c->handler(c->data);
+        }
+    }
+
+#if (cw_DEBUG)
+
+    /*
+     * we could allocate the pool->log from this pool
+     * so we cannot use this log while free()ing the pool
+     */
+
+    for (l = pool->large; l; l = l->next) {
+        cw_log_debug(pool->log, "free: %p", l->alloc);
+    }
+
+    for (p = pool, n = pool->d.next; /* void */; p = n, n = n->d.next) {
+        cw_log_debug(pool->log, "free: %p, unused: %uz", p, p->d.end - p->d.last);
+
+        if (n == NULL) {
+            break;
+        }
+    }
+
+#endif
+
+    for (l = pool->large; l; l = l->next) {
+        if (l->alloc) {
+            cw_free(l->alloc);
+        }
+    }
+
+    for (p = pool, n = pool->d.next; /* void */; p = n, n = n->d.next) {
+        cw_free(p);
+
+        if (n == NULL) {
+            break;
+        }
+    }
+}
+
 void *
 cw_palloc(cw_pool_t *pool, size_t size)
 {

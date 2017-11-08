@@ -66,6 +66,11 @@ main(int argc, char *const *argv)
     init_cycle.log = log;
     cw_cycle = &init_cycle;
 
+    init_cycle.pool = cw_create_pool(1024, log);
+    if (init_cycle.pool == NULL) {
+        return 1;
+    }
+
     if (cw_preinit_modules() != CW_OK) {
         return 1;
     }

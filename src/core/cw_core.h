@@ -8,6 +8,7 @@ typedef struct cw_conf_s cw_conf_t;
 typedef struct cw_cycle_s cw_cycle_t;
 typedef struct cw_log_s cw_log_t;
 typedef struct cw_pool_s cw_pool_t;
+typedef struct cw_chain_s cw_chain_t;
 typedef struct cw_command_s cw_command_t;
 typedef struct cw_event_s cw_event_t;
 typedef struct cw_connection_s cw_connection_t;
