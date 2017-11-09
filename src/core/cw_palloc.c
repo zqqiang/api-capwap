@@ -47,7 +47,7 @@ cw_destroy_pool(cw_pool_t *pool)
         }
     }
 
-#if (cw_DEBUG)
+#if (CW_DEBUG)
 
     /*
      * we could allocate the pool->log from this pool

@@ -30,6 +30,14 @@ cw_init_cycle(cw_cycle_t *old_cycle)
     cycle->pool = pool;
     cycle->log = old_cycle->log;
 
+    cycle->conf_ctx = cw_pcalloc(pool, cw_max_module * sizeof(void *));
+    if (cycle->conf_ctx == NULL) {
+        cw_destroy_pool(pool);
+        return NULL;
+    }
+
+
+
     if (cw_cycle_modules(cycle) != CW_OK) {
         return NULL;
     }
@@ -44,12 +52,14 @@ cw_init_cycle(cw_cycle_t *old_cycle)
         if (module->create_conf) {
             rv = module->create_conf(cycle);
             if (rv == NULL) {
-                // cw_destroy_pool(pool);
+                cw_destroy_pool(pool);
                 return NULL;
             }
             cycle->conf_ctx[cycle->modules[i]->index] = rv;
         }
     }
+
+
 
     if (cw_open_listening_sockets(cycle) != CW_OK) {
         goto failed;

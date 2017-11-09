@@ -62,6 +62,8 @@ cw_int_t cw_preinit_modules(void);
 cw_int_t cw_cycle_modules(cw_cycle_t *cycle);
 
 extern cw_module_t *cw_modules[];
+extern cw_uint_t     cw_max_module;
+
 extern char *cw_module_names[];
 
 #endif /* _CW_MODULE_H_INCLUDED_ */
