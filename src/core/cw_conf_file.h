@@ -25,24 +25,33 @@ struct cw_command_s {
     void                 *post;
 };
 
+typedef struct {
+    cw_file_t            file;
+    cw_buf_t            *buffer;
+    cw_buf_t            *dump;
+    cw_uint_t            line;
+} cw_conf_file_t;
+
 #define cw_null_command  { cw_null_string, 0, NULL, 0, 0, NULL }
 
 struct cw_conf_s {
-    // char                 *name;
-    // cw_array_t          *args;
+    char                 *name;
+    cw_array_t          *args;
 
-    // cw_cycle_t          *cycle;
+    cw_cycle_t          *cycle;
     cw_pool_t           *pool;
-    // cw_pool_t           *temp_pool;
-    // cw_conf_file_t      *conf_file;
+    cw_pool_t           *temp_pool;
+    cw_conf_file_t      *conf_file;
     cw_log_t            *log;
 
-    // void                 *ctx;
-    // cw_uint_t            module_type;
-    // cw_uint_t            cmd_type;
+    void                 *ctx;
+    cw_uint_t            module_type;
+    cw_uint_t            cmd_type;
 
     // cw_conf_handler_pt   handler;
-    // char                 *handler_conf;
+    char                 *handler_conf;
 };
+
+char *cw_conf_param(cw_conf_t *cf);
 
 #endif /* _CW_CONF_FILE_H_INCLUDED_ */

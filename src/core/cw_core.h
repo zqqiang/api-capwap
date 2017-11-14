@@ -10,6 +10,7 @@ typedef struct cw_log_s cw_log_t;
 typedef struct cw_pool_s cw_pool_t;
 typedef struct cw_chain_s cw_chain_t;
 typedef struct cw_command_s cw_command_t;
+typedef struct cw_file_s cw_file_t;
 typedef struct cw_event_s cw_event_t;
 typedef struct cw_connection_s cw_connection_t;
 
@@ -27,6 +28,7 @@ typedef void (*cw_connection_handler_pt)(cw_connection_t *c);
 #include <cw_errno.h>
 #include <cw_thread.h>
 #include <cw_string.h>
+#include <cw_files.h>
 #include <cw_socket.h>
 #include <cw_process.h>
 #include <cw_process_cycle.h>
@@ -39,6 +41,7 @@ typedef void (*cw_connection_handler_pt)(cw_connection_t *c);
 #include <cw_connection.h>
 #include <cw_alloc.h>
 #include <cw_palloc.h>
+#include <cw_buf.h>
 #include <cw_array.h>
 #include <cw_cycle.h>
 #include <cw_conf_file.h>

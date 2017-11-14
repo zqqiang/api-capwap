@@ -47,4 +47,6 @@
 
 #include <zlog.h>
 
+extern char **environ;
+
 #endif /* _CW_LINUX_CONFIG_H_INCLUDED_ */

@@ -47,6 +47,7 @@ struct cw_pool_s {
 cw_pool_t *cw_create_pool(size_t size, cw_log_t *log);
 void cw_destroy_pool(cw_pool_t *pool);
 
+void *cw_palloc(cw_pool_t *pool, size_t size);
 void *cw_pcalloc(cw_pool_t *pool, size_t size);
 
 #endif /* _CW_PALLOC_H_INCLUDED_ */
