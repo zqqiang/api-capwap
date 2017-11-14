@@ -19,6 +19,8 @@ struct cw_cycle_s {
 
     cw_array_t listening;
 
+    cw_str_t                 conf_param;
+
 };
 
 typedef struct {

@@ -4,7 +4,7 @@
 char *
 cw_conf_param(cw_conf_t *cf)
 {
-    char             *rv;
+    char             *rv = NULL;
     cw_str_t        *param;
     cw_buf_t         b;
     cw_conf_file_t   conf_file;
@@ -12,7 +12,7 @@ cw_conf_param(cw_conf_t *cf)
     param = &cf->cycle->conf_param;
 
     if (param->len == 0) {
-        return cw_CONF_OK;
+        return CW_CONF_OK;
     }
 
     cw_memzero(&conf_file, sizeof(cw_conf_file_t));

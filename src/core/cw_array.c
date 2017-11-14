@@ -12,7 +12,7 @@ cw_array_create(cw_pool_t *p, cw_uint_t n, size_t size)
         return NULL;
     }
 
-    if (cw_array_init(a, p, n, size) != cw_OK) {
+    if (cw_array_init(a, p, n, size) != CW_OK) {
         return NULL;
     }
 
