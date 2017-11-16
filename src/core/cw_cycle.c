@@ -94,7 +94,11 @@ cw_init_cycle(cw_cycle_t *old_cycle)
         return NULL;
     }
 
-
+    if (cw_conf_parse(&conf, &cycle->conf_file) != CW_CONF_OK) {
+        environ = senv;
+        cw_destroy_cycle_pools(&conf);
+        return NULL;
+    }
 
 
 

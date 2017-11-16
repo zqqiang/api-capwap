@@ -53,5 +53,6 @@ struct cw_conf_s {
 };
 
 char *cw_conf_param(cw_conf_t *cf);
+char *cw_conf_parse(cw_conf_t *cf, cw_str_t *filename);
 
 #endif /* _CW_CONF_FILE_H_INCLUDED_ */
