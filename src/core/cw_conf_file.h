@@ -13,6 +13,10 @@
 #define CW_CONF_OK          NULL
 #define CW_CONF_ERROR       (void *) -1
 
+#define CW_CONF_BLOCK_START 1
+#define CW_CONF_BLOCK_DONE  2
+#define CW_CONF_FILE_DONE   3
+
 #define CW_CORE_MODULE      0x45524F43  /* "CORE" */
 #define CW_CONF_MODULE      0x464E4F43  /* "CONF" */
 
@@ -34,6 +38,9 @@ typedef struct {
 
 #define cw_null_command  { cw_null_string, 0, NULL, 0, 0, NULL }
 
+typedef char *(*cw_conf_handler_pt)(cw_conf_t *cf,
+    cw_command_t *dummy, void *conf);
+
 struct cw_conf_s {
     char                 *name;
     cw_array_t          *args;
@@ -48,7 +55,7 @@ struct cw_conf_s {
     cw_uint_t            module_type;
     cw_uint_t            cmd_type;
 
-    // cw_conf_handler_pt   handler;
+    cw_conf_handler_pt   handler;
     char                 *handler_conf;
 };
 

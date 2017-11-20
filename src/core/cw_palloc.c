@@ -127,6 +127,18 @@ cw_palloc_block(cw_pool_t *pool, size_t size)
     return m;
 }
 
+void *
+cw_pnalloc(cw_pool_t *pool, size_t size)
+{
+#if !(CW_DEBUG_PALLOC)
+    if (size <= pool->max) {
+        return cw_palloc_small(pool, size, 0);
+    }
+#endif
+
+    return cw_palloc_large(pool, size);
+}
+
 static cw_inline void *
 cw_palloc_small(cw_pool_t *pool, size_t size, cw_uint_t align)
 {

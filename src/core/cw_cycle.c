@@ -3,6 +3,8 @@
 
 volatile cw_cycle_t  *cw_cycle;
 
+cw_uint_t             cw_dump_config;
+
 static void
 cw_destroy_cycle_pools(cw_conf_t *conf)
 {

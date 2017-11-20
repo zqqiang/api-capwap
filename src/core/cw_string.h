@@ -20,6 +20,9 @@ typedef struct {
 #define cw_memcpy(dst, src, n)   (void) memcpy(dst, src, n)
 #define cw_cpymem(dst, src, n)   (((u_char *) memcpy(dst, src, n)) + (n))
 
+#define cw_memmove(dst, src, n)   (void) memmove(dst, src, n)
+#define cw_movemem(dst, src, n)   (((u_char *) memmove(dst, src, n)) + (n))
+
 
 #define cw_string_format(str) ((int)str.len), (str.data)
 
