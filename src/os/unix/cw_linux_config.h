@@ -46,6 +46,7 @@
 #include <sys/syscall.h>
 
 #include <zlog.h>
+#include <cw_auto_config.h>
 
 extern char **environ;
 

@@ -47,6 +47,15 @@ cw_init_cycle(cw_cycle_t *old_cycle)
         return NULL;
     }
 
+    cycle->conf_file.len = old_cycle->conf_file.len;
+    cycle->conf_file.data = cw_pnalloc(pool, old_cycle->conf_file.len + 1);
+    if (cycle->conf_file.data == NULL) {
+        cw_destroy_pool(pool);
+        return NULL;
+    }
+    cw_cpystrn(cycle->conf_file.data, old_cycle->conf_file.data,
+                old_cycle->conf_file.len + 1);
+
 
 
     if (cw_cycle_modules(cycle) != CW_OK) {
