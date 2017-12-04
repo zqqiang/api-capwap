@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+. auto/options
+. auto/init
+. auto/sources
+
+test -d $CW_OBJS || mkdir -p $CW_OBJS
+
+echo > $CW_AUTO_HEADERS_H
+
+if test -z "$CW_PLATFORM"; then
+    echo "checking for OS"
+
+    CW_SYSTEM=`uname -s 2>/dev/null`
+    CW_RELEASE=`uname -r 2>/dev/null`
+    CW_MACHINE=`uname -m 2>/dev/null`
+
+    echo " + $CW_SYSTEM $CW_RELEASE $CW_MACHINE"
+    CW_PLATFORM="$CW_SYSTEM:$CW_RELEASE:$CW_MACHINE";
+
+else
+    echo "building for $CW_PLATFORM"
+    CW_SYSTEM=$CW_PLATFORM
+fi
+
+. auto/cc/conf
+
+. auto/make
+

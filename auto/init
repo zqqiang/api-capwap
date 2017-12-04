@@ -1,0 +1,6 @@
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+CW_MAKEFILE=$CW_OBJS/Makefile
+
+CW_AUTO_HEADERS_H=$CW_OBJS/cw_auto_headers.h

@@ -1,0 +1,7 @@
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+CW_OBJS=objs
+
+CC=${CC:-cc}
+CPP=

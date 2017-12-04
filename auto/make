@@ -1,0 +1,13 @@
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+echo "creating $CW_MAKEFILE"
+
+cat << END                                                     > $CW_MAKEFILE
+
+CC =    $CC
+CFLAGS = $CFLAGS
+CPP =   $CPP
+LINK =  $LINK
+
+END

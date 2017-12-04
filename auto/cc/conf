@@ -1,0 +1,6 @@
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+LINK="\$(CC)"
+
+CFLAGS="$CFLAGS $CW_CC_OPT"
