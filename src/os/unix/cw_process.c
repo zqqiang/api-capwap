@@ -18,6 +18,7 @@ cw_process_t cw_processes[CW_MAX_PROCESSES];
 cw_signal_t  signals[] = {
     { SIGQUIT, "SIGQUIT", "quit", cw_signal_handler },
     { SIGTERM, "SIGTERM", "stop", cw_signal_handler },
+    { 0, NULL, "", NULL }
 };
 
 cw_int_t

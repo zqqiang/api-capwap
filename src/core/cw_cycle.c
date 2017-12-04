@@ -3,6 +3,8 @@
 
 volatile cw_cycle_t  *cw_cycle;
 
+cw_uint_t             cw_dump_config;
+
 static void
 cw_destroy_cycle_pools(cw_conf_t *conf)
 {
@@ -44,6 +46,15 @@ cw_init_cycle(cw_cycle_t *old_cycle)
         cw_destroy_pool(pool);
         return NULL;
     }
+
+    cycle->conf_file.len = old_cycle->conf_file.len;
+    cycle->conf_file.data = cw_pnalloc(pool, old_cycle->conf_file.len + 1);
+    if (cycle->conf_file.data == NULL) {
+        cw_destroy_pool(pool);
+        return NULL;
+    }
+    cw_cpystrn(cycle->conf_file.data, old_cycle->conf_file.data,
+                old_cycle->conf_file.len + 1);
 
 
 
@@ -94,7 +105,11 @@ cw_init_cycle(cw_cycle_t *old_cycle)
         return NULL;
     }
 
-
+    if (cw_conf_parse(&conf, &cycle->conf_file) != CW_CONF_OK) {
+        environ = senv;
+        cw_destroy_cycle_pools(&conf);
+        return NULL;
+    }
 
 
 

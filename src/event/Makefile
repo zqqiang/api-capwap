@@ -3,7 +3,7 @@ TOPDIR = ../..
 SUBDIRS = modules
 
 OBJS = cw_event.o
-EXTRA_CFLAGS = -DCW_LINUX -I. -I../os/unix -I../core
+EXTRA_CFLAGS = -DCW_LINUX -I. -I../os/unix -I../core -I../../objs
 TARGET_O_CP = libevent.o
 OBJECTS_O = $(OBJS)
 

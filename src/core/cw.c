@@ -2,6 +2,8 @@
 #include <cw_core.h>
 #include <cw.h>
 
+static cw_int_t cw_process_options(cw_cycle_t *cycle);
+
 static void *
 cw_core_module_create_conf(cw_cycle_t *cycle)
 {
@@ -50,6 +52,8 @@ cw_module_t  cw_core_module = {
     CW_MODULE_V1_PADDING
 };
 
+static u_char      *cw_conf_file;
+
 int cw_cdecl
 main(int argc, char *const *argv)
 {
@@ -71,6 +75,12 @@ main(int argc, char *const *argv)
         return 1;
     }
 
+    if (cw_process_options(&init_cycle) != CW_OK) {
+        return 1;
+    }
+
+
+
     if (cw_preinit_modules() != CW_OK) {
         return 1;
     }
@@ -87,6 +97,20 @@ main(int argc, char *const *argv)
     }
 
     cw_master_process_cycle(cycle);
+
+    return CW_OK;
+}
+
+static cw_int_t
+cw_process_options(cw_cycle_t *cycle)
+{
+    if (cw_conf_file) {
+        cycle->conf_file.len = cw_strlen(cw_conf_file);
+        cycle->conf_file.data = cw_conf_file;
+
+    } else {
+        cw_str_set(&cycle->conf_file, CW_CONF_PATH);
+    }
 
     return CW_OK;
 }

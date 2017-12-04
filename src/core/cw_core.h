@@ -46,6 +46,10 @@ typedef void (*cw_connection_handler_pt)(cw_connection_t *c);
 #include <cw_cycle.h>
 #include <cw_conf_file.h>
 
+#define LF     (u_char) '\n'
+#define CR     (u_char) '\r'
+#define CRLF   "\r\n"
+
 #define cw_abs(value)       (((value) >= 0) ? (value) : - (value))
 #define cw_max(val1, val2)  ((val1 < val2) ? (val2) : (val1))
 #define cw_min(val1, val2)  ((val1 > val2) ? (val2) : (val1))

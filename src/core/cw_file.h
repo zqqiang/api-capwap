@@ -7,7 +7,7 @@
 struct cw_file_s {
     cw_fd_t                   fd;
     cw_str_t                  name;
-    // cw_file_info_t            info;
+    cw_file_info_t            info;
 
     off_t                      offset;
     off_t                      sys_offset;

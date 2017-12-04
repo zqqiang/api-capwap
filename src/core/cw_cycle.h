@@ -19,8 +19,8 @@ struct cw_cycle_s {
 
     cw_array_t listening;
 
+    cw_str_t                 conf_file;
     cw_str_t                 conf_param;
-
 };
 
 typedef struct {
@@ -32,5 +32,6 @@ typedef struct {
 cw_cycle_t *cw_init_cycle(cw_cycle_t *old_cycle);
 
 extern volatile cw_cycle_t  *cw_cycle;
+extern cw_uint_t             cw_dump_config;
 
 #endif /* _CW_CYCLE_H_INCLUDED_ */
