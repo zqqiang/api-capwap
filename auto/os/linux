@@ -1,0 +1,176 @@
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+
+# have=CW_LINUX . auto/have_headers
+
+CORE_INCS="$UNIX_INCS"
+CORE_DEPS="$UNIX_DEPS $LINUX_DEPS"
+CORE_SRCS="$UNIX_SRCS $LINUX_SRCS"
+
+cw_spacer='
+'
+
+cc_aux_flags="$CC_AUX_FLAGS"
+CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
+
+
+# Linux kernel version
+
+version=$((`uname -r \
+    | sed -n -e 's/^\([0-9][0-9]*\)\.\([0-9][0-9]*\)\.\([0-9][0-9]*\).*/ \
+                                                 \1*256*256+\2*256+\3/p' \
+             -e 's/^\([0-9][0-9]*\)\.\([0-9][0-9]*\).*/\1*256*256+\2*256/p'`))
+
+version=${version:-0}
+
+
+# posix_fadvise64() had been implemented in 2.5.60
+
+if [ $version -lt 132412 ]; then
+    have=CW_HAVE_POSIX_FADVISE . auto/nohave
+fi
+
+# epoll, EPOLLET version
+
+cw_feature="epoll"
+cw_feature_name="CW_HAVE_EPOLL"
+cw_feature_run=yes
+cw_feature_incs="#include <sys/epoll.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="int efd = 0;
+                  struct epoll_event ee;
+                  ee.events = EPOLLIN|EPOLLOUT|EPOLLET;
+                  ee.data.ptr = NULL;
+                  (void) ee;
+                  efd = epoll_create(100);
+                  if (efd == -1) return 1;"
+. auto/feature
+
+if [ $cw_found = yes ]; then
+    # have=CW_HAVE_CLEAR_EVENT . auto/have
+    CORE_SRCS="$CORE_SRCS $EPOLL_SRCS"
+    EVENT_MODULES="$EVENT_MODULES $EPOLL_MODULE"
+    EVENT_FOUND=YES
+
+
+    # EPOLLRDHUP appeared in Linux 2.6.17, glibc 2.8
+
+    cw_feature="EPOLLRDHUP"
+    cw_feature_name="CW_HAVE_EPOLLRDHUP"
+    cw_feature_run=no
+    cw_feature_incs="#include <sys/epoll.h>"
+    cw_feature_path=
+    cw_feature_libs=
+    cw_feature_test="int efd = 0, fd = 0;
+                      struct epoll_event ee;
+                      ee.events = EPOLLIN|EPOLLRDHUP|EPOLLET;
+                      ee.data.ptr = NULL;
+                      epoll_ctl(efd, EPOLL_CTL_ADD, fd, &ee)"
+    . auto/feature
+
+
+    # EPOLLEXCLUSIVE appeared in Linux 4.5, glibc 2.24
+
+    cw_feature="EPOLLEXCLUSIVE"
+    cw_feature_name="CW_HAVE_EPOLLEXCLUSIVE"
+    cw_feature_run=no
+    cw_feature_incs="#include <sys/epoll.h>"
+    cw_feature_path=
+    cw_feature_libs=
+    cw_feature_test="int efd = 0, fd = 0;
+                      struct epoll_event ee;
+                      ee.events = EPOLLIN|EPOLLEXCLUSIVE;
+                      ee.data.ptr = NULL;
+                      epoll_ctl(efd, EPOLL_CTL_ADD, fd, &ee)"
+    . auto/feature
+fi
+
+
+# O_PATH and AT_EMPTY_PATH were introduced in 2.6.39, glibc 2.14
+
+cw_feature="O_PATH"
+cw_feature_name="CW_HAVE_O_PATH"
+cw_feature_run=no
+cw_feature_incs="#include <sys/types.h>
+                  #include <sys/stat.h>
+                  #include <fcntl.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="int fd; struct stat sb;
+                  fd = openat(AT_FDCWD, \".\", O_PATH|O_DIRECTORY|O_NOFOLLOW);
+                  if (fstatat(fd, \"\", &sb, AT_EMPTY_PATH) != 0) return 1"
+. auto/feature
+
+
+# sendfile()
+
+CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE"
+cw_feature="sendfile()"
+cw_feature_name="CW_HAVE_SENDFILE"
+cw_feature_run=yes
+cw_feature_incs="#include <sys/sendfile.h>
+                  #include <errno.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="int s = 0, fd = 1;
+                  ssize_t n; off_t off = 0;
+                  n = sendfile(s, fd, &off, 1);
+                  if (n == -1 && errno == ENOSYS) return 1"
+. auto/feature
+
+if [ $cw_found = yes ]; then
+    CORE_SRCS="$CORE_SRCS $LINUX_SENDFILE_SRCS"
+fi
+
+
+# sendfile64()
+
+CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
+cw_feature="sendfile64()"
+cw_feature_name="CW_HAVE_SENDFILE64"
+cw_feature_run=yes
+cw_feature_incs="#include <sys/sendfile.h>
+                  #include <errno.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="int s = 0, fd = 1;
+                  ssize_t n; off_t off = 0;
+                  n = sendfile(s, fd, &off, 1);
+                  if (n == -1 && errno == ENOSYS) return 1"
+. auto/feature
+
+
+cw_include="sys/prctl.h"; . auto/include
+
+# prctl(PR_SET_DUMPABLE)
+
+cw_feature="prctl(PR_SET_DUMPABLE)"
+cw_feature_name="CW_HAVE_PR_SET_DUMPABLE"
+cw_feature_run=yes
+cw_feature_incs="#include <sys/prctl.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="if (prctl(PR_SET_DUMPABLE, 1, 0, 0, 0) == -1) return 1"
+. auto/feature
+
+
+# crypt_r()
+
+cw_feature="crypt_r()"
+cw_feature_name="CW_HAVE_GNU_CRYPT_R"
+cw_feature_run=no
+cw_feature_incs="#include <crypt.h>"
+cw_feature_path=
+cw_feature_libs=-lcrypt
+cw_feature_test="struct crypt_data  cd;
+                  crypt_r(\"key\", \"salt\", &cd);"
+. auto/feature
+
+
+cw_include="sys/vfs.h";     . auto/include
+
+
+CC_AUX_FLAGS="$cc_aux_flags -D_GNU_SOURCE -D_FILE_OFFSET_BITS=64"
