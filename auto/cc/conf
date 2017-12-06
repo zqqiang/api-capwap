@@ -3,4 +3,4 @@
 
 LINK="\$(CC)"
 
-CFLAGS="$CFLAGS $CW_CC_OPT"
+. auto/cc/name

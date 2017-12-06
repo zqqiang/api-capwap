@@ -1,0 +1,123 @@
+
+# Copyright (C) Igor Sysoev
+# Copyright (C) Nginx, Inc.
+
+
+echo $cw_n "checking for $cw_feature ...$cw_c"
+
+cat << END >> $CW_AUTOCONF_ERR
+
+----------------------------------------
+checking for $cw_feature
+
+END
+
+cw_found=no
+
+if test -n "$cw_feature_name"; then
+    cw_have_feature=`echo $cw_feature_name \
+                   | tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ`
+fi
+
+if test -n "$cw_feature_path"; then
+    for cw_temp in $cw_feature_path; do
+        cw_feature_inc_path="$cw_feature_inc_path -I $cw_temp"
+    done
+fi
+
+cat << END > $CW_AUTOTEST.c
+
+#include <sys/types.h>
+$CW_INCLUDE_UNISTD_H
+$cw_feature_incs
+
+int main(void) {
+    $cw_feature_test;
+    return 0;
+}
+
+END
+
+
+cw_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS $cw_feature_inc_path \
+          -o $CW_AUTOTEST $CW_AUTOTEST.c $CW_TEST_LD_OPT $cw_feature_libs"
+
+cw_feature_inc_path=
+
+eval "/bin/sh -c \"$cw_test\" >> $CW_AUTOCONF_ERR 2>&1"
+
+
+if [ -x $CW_AUTOTEST ]; then
+
+    case "$cw_feature_run" in
+
+        yes)
+            # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+            if /bin/sh -c $CW_AUTOTEST >> $CW_AUTOCONF_ERR 2>&1; then
+                echo " found"
+                cw_found=yes
+
+                if test -n "$cw_feature_name"; then
+                    have=$cw_have_feature . auto/have
+                fi
+
+            else
+                echo " found but is not working"
+            fi
+        ;;
+
+        value)
+            # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+            if /bin/sh -c $CW_AUTOTEST >> $CW_AUTOCONF_ERR 2>&1; then
+                echo " found"
+                cw_found=yes
+
+                cat << END >> $NGX_AUTO_CONFIG_H
+
+#ifndef $cw_feature_name
+#define $cw_feature_name  `$CW_AUTOTEST`
+#endif
+
+END
+            else
+                echo " found but is not working"
+            fi
+        ;;
+
+        bug)
+            # /bin/sh is used to intercept "Killed" or "Abort trap" messages
+            if /bin/sh -c $CW_AUTOTEST >> $CW_AUTOCONF_ERR 2>&1; then
+                echo " not found"
+
+            else
+                echo " found"
+                cw_found=yes
+
+                if test -n "$cw_feature_name"; then
+                    have=$cw_have_feature . auto/have
+                fi
+            fi
+        ;;
+
+        *)
+            echo " found"
+            cw_found=yes
+
+            if test -n "$cw_feature_name"; then
+                have=$cw_have_feature . auto/have
+            fi
+        ;;
+
+    esac
+
+else
+    echo " not found"
+
+    echo "----------"    >> $CW_AUTOCONF_ERR
+    cat $CW_AUTOTEST.c  >> $CW_AUTOCONF_ERR
+    echo "----------"    >> $CW_AUTOCONF_ERR
+    echo $cw_test       >> $CW_AUTOCONF_ERR
+    echo "----------"    >> $CW_AUTOCONF_ERR
+fi
+
+# rm -rf $CW_AUTOTEST*
