@@ -1,0 +1,76 @@
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+
+echo $cw_n "checking for $cw_type size ...$cw_c"
+
+cat << END >> $CW_AUTOCONF_ERR
+
+----------------------------------------
+checking for $cw_type size
+
+END
+
+cw_size=
+
+cat << END > $CW_AUTOTEST.c
+
+#include <sys/types.h>
+#include <sys/time.h>
+$CW_INCLUDE_UNISTD_H
+#include <signal.h>
+#include <stdio.h>
+#include <sys/resource.h>
+$CW_INCLUDE_INTTYPES_H
+$CW_INCLUDE_AUTO_CONFIG_H
+
+int main(void) {
+    printf("%d", (int) sizeof($cw_type));
+    return 0;
+}
+
+END
+
+
+cw_test="$CC $CC_TEST_FLAGS $CC_AUX_FLAGS \
+          -o $CW_AUTOTEST $CW_AUTOTEST.c $NGX_LD_OPT $cw_feature_libs"
+
+eval "$cw_test >> $CW_AUTOCONF_ERR 2>&1"
+
+
+if [ -x $CW_AUTOTEST ]; then
+    cw_size=`$CW_AUTOTEST`
+    echo " $cw_size bytes"
+fi
+
+
+case $cw_size in
+    4)
+        cw_max_value=2147483647
+        cw_max_len='(sizeof("-2147483648") - 1)'
+    ;;
+
+    8)
+        cw_max_value=9223372036854775807LL
+        cw_max_len='(sizeof("-9223372036854775808") - 1)'
+    ;;
+
+    *)
+        echo
+        echo "$0: error: can not detect $cw_type size"
+
+        echo "----------"    >> $CW_AUTOCONF_ERR
+        cat $CW_AUTOTEST.c  >> $CW_AUTOCONF_ERR
+        echo "----------"    >> $CW_AUTOCONF_ERR
+        echo $cw_test       >> $CW_AUTOCONF_ERR
+        echo "----------"    >> $CW_AUTOCONF_ERR
+
+        rm -rf $CW_AUTOTEST*
+
+        exit 1
+esac
+
+
+rm -rf $CW_AUTOTEST*
+

@@ -34,7 +34,8 @@ cw_type="rlim_t"; cw_types="int"; . auto/types/typedef
 
 . auto/types/uintptr_t
 
-. auto/endianness
+# . auto/endianness
+echo "todo: auto/endianness"
 
 cw_type="size_t"; . auto/types/sizeof
 cw_param=CW_MAX_SIZE_T_VALUE; cw_value=$cw_max_value; . auto/types/value
