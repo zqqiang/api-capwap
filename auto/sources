@@ -1,0 +1,6 @@
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+
+CORE_MODULES="cw_core_module cw_conf_module"

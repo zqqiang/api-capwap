@@ -3,6 +3,14 @@
 
 echo "creating $CW_MAKEFILE"
 
+mkdir -p $CW_OBJS/src/core $CW_OBJS/src/event $CW_OBJS/src/event/modules \
+         $CW_OBJS/src/os/unix \
+         $CW_OBJS/src/http $CW_OBJS/src/http/modules
+
+cw_objs_dir=$CW_OBJS$CW_regex_dirsep
+cw_use_pch=`echo $CW_USE_PCH | sed -e "s/\//$CW_regex_dirsep/g"`
+
+
 cat << END                                                     > $CW_MAKEFILE
 
 CC =    $CC
@@ -11,3 +19,80 @@ CPP =   $CPP
 LINK =  $LINK
 
 END
+
+# the core dependencies and include paths
+
+cw_deps=`echo $CORE_DEPS $CW_AUTO_CONFIG_H $CW_PCH \
+    | sed -e "s/  *\([^ ][^ ]*\)/$cw_regex_cont\1/g" \
+          -e "s/\//$cw_regex_dirsep/g"`
+
+cw_incs=`echo $CORE_INCS $CW_OBJS \
+    | sed -e "s/  *\([^ ][^ ]*\)/$cw_regex_cont$cw_include_opt\1/g" \
+          -e "s/\//$cw_regex_dirsep/g"`
+
+cat << END                                                    >> $CW_MAKEFILE
+
+CORE_DEPS = $cw_deps
+
+
+CORE_INCS = $cw_include_opt$cw_incs
+
+END
+
+# capwap
+
+cw_all_srcs=`echo $cw_all_srcs | sed -e "s/\//$cw_regex_dirsep/g"`
+
+cw_all_objs=`echo $cw_all_srcs \
+    | sed -e "s#\([^ ]*\.\)cpp#$CW_OBJS\/\1$cw_objext#g" \
+          -e "s#\([^ ]*\.\)cc#$CW_OBJS\/\1$cw_objext#g" \
+          -e "s#\([^ ]*\.\)c#$CW_OBJS\/\1$cw_objext#g" \
+          -e "s#\([^ ]*\.\)S#$CW_OBJS\/\1$cw_objext#g"`
+
+cw_modules_c=`echo $CW_MODULES_C | sed -e "s/\//$cw_regex_dirsep/g"`
+
+cw_modules_obj=`echo $cw_modules_c | sed -e "s/\(.*\.\)c/\1$cw_objext/"`
+
+
+if test -n "$CW_RES"; then
+   cw_res=$CW_RES
+else
+   cw_res="$CW_RC $CW_ICONS"
+   cw_rcc=`echo $CW_RCC | sed -e "s/\//$cw_regex_dirsep/g"`
+fi
+
+cw_deps=`echo $cw_all_objs $cw_modules_obj $cw_res $LINK_DEPS \
+    | sed -e "s/  *\([^ ][^ ]*\)/$CW_regex_cont\1/g" \
+          -e "s/\//$cw_regex_dirsep/g"`
+
+cw_objs=`echo $cw_all_objs $cw_modules_obj \
+    | sed -e "s/  *\([^ ][^ ]*\)/$cw_long_regex_cont\1/g" \
+          -e "s/\//$cw_regex_dirsep/g"`
+
+cw_libs=
+if test -n "$CW_LD_OPT$CORE_LIBS"; then
+    cw_libs=`echo $CW_LD_OPT $CORE_LIBS \
+        | sed -e "s/\//$cw_regex_dirsep/g" -e "s/^/$cw_long_regex_cont/"`
+fi
+
+cw_link=${CORE_LINK:+`echo $CORE_LINK \
+    | sed -e "s/\//$cw_regex_dirsep/g" -e "s/^/$cw_long_regex_cont/"`}
+
+cw_main_link=${MAIN_LINK:+`echo $MAIN_LINK \
+    | sed -e "s/\//$cw_regex_dirsep/g" -e "s/^/$cw_long_regex_cont/"`}
+
+
+cat << END                                                    >> $CW_MAKEFILE
+
+build:	binary modules manpage
+
+binary:	$CW_OBJS${cw_dirsep}capwap$cw_binext
+
+$CW_OBJS${CW_dirsep}capwap$CW_binext:	$cw_deps$cw_spacer
+	\$(LINK) $cw_long_start$cw_binout$CW_OBJS${cw_dirsep}capwap$cw_long_cont$cw_objs$cw_libs$cw_link$cw_main_link
+	$cw_rcc
+$cw_long_end
+
+modules:
+END
+

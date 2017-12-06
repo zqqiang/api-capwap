@@ -1,0 +1,58 @@
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+if [ $CW_TEST_BUILD_EPOLL = YES ]; then
+    # have=CW_HAVE_EPOLL . auto/have
+    # have=CW_HAVE_EPOLLRDHUP . auto/have
+    # have=CW_HAVE_EPOLLEXCLUSIVE . auto/have
+    # have=CW_HAVE_EVENTFD . auto/have
+    # have=CW_TEST_BUILD_EPOLL . auto/have
+    EVENT_MODULES="$EVENT_MODULES $EPOLL_MODULE"
+    CORE_SRCS="$CORE_SRCS $EPOLL_SRCS"
+fi
+
+modules="$CORE_MODULES $EVENT_MODULES"
+
+modules="$modules $MISC_MODULES"
+
+cat << END                                    > $CW_MODULES_C
+
+#include <cw_config.h>
+#include <cw_core.h>
+
+$CW_PRAGMA
+
+END
+
+for mod in $modules
+do
+    echo "extern cw_module_t  $mod;"         >> $CW_MODULES_C
+done
+
+echo                                          >> $CW_MODULES_C
+echo 'cw_module_t *cw_modules[] = {'        >> $CW_MODULES_C
+
+for mod in $modules
+do
+    echo "    &$mod,"                         >> $CW_MODULES_C
+done
+
+cat << END                                    >> $CW_MODULES_C
+    NULL
+};
+
+END
+
+echo 'char *cw_module_names[] = {'           >> $CW_MODULES_C
+
+for mod in $modules
+do
+    echo "    \"$mod\","                      >> $CW_MODULES_C
+done
+
+cat << END                                    >> $CW_MODULES_C
+    NULL
+};
+
+END
