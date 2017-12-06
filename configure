@@ -32,5 +32,9 @@ if [ "$CW_PLATFORM" != win32 ]; then
     . auto/headers
 fi
 
+. auto/os/conf
+
+
+
 . auto/make
 

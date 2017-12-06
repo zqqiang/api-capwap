@@ -1,0 +1,65 @@
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+
+echo "checking for $CW_SYSTEM specific features"
+
+case "$CW_PLATFORM" in
+
+    Linux:*)
+        . auto/os/linux
+    ;;
+
+    Darwin:*)
+        . auto/os/darwin
+    ;;
+
+    *)
+        CORE_INCS="$UNIX_INCS"
+        CORE_DEPS="$UNIX_DEPS $POSIX_DEPS"
+        CORE_SRCS="$UNIX_SRCS"
+    ;;
+
+esac
+
+
+case "$CW_MACHINE" in
+
+    i386 | i686 | i86pc)
+        have=CW_HAVE_NONALIGNED . auto/have
+        CW_MACH_CACHE_LINE=32
+    ;;
+
+    amd64 | x86_64)
+        # have=CW_HAVE_NONALIGNED . auto/have
+        echo "have CW_HAVE_NONALIGNED"
+        CW_MACH_CACHE_LINE=64
+    ;;
+
+    sun4u | sun4v | sparc | sparc64)
+        have=CW_ALIGNMENT value=16 . auto/define
+        # TODO
+        CW_MACH_CACHE_LINE=64
+    ;;
+
+    ia64 )
+        have=CW_ALIGNMENT value=16 . auto/define
+        # TODO
+        CW_MACH_CACHE_LINE=64
+    ;;
+
+    *)
+        have=CW_ALIGNMENT value=16 . auto/define
+        CW_MACH_CACHE_LINE=32
+    ;;
+
+esac
+
+if test -z "$CW_CPU_CACHE_LINE"; then
+    CW_CPU_CACHE_LINE=$CW_MACH_CACHE_LINE
+fi
+
+# have=CW_CPU_CACHE_LINE value=$CW_CPU_CACHE_LINE . auto/define
+echo "have CW_CPU_CACHE_LINE"
+

@@ -41,9 +41,9 @@ if [ -x $CW_AUTOTEST ]; then
               | tr abcdefghijklmnopqrstuvwxyz/. ABCDEFGHIJKLMNOPQRSTUVWXYZ__`
 
 
-    have=CW_HAVE_$cw_name . auto/have_headers
+    # have=CW_HAVE_$cw_name . auto/have_headers
 
-    eval "CW_INCLUDE_$cw_name='#include <$cw_include>'"
+    # eval "CW_INCLUDE_$cw_name='#include <$cw_include>'"
 
 else
     echo " not found"

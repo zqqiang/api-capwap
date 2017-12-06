@@ -58,7 +58,8 @@ if [ -x $CW_AUTOTEST ]; then
                 cw_found=yes
 
                 if test -n "$cw_feature_name"; then
-                    have=$cw_have_feature . auto/have
+                    # have=$cw_have_feature . auto/have
+                    echo "have $cw_have_feature"
                 fi
 
             else
@@ -94,7 +95,8 @@ END
                 cw_found=yes
 
                 if test -n "$cw_feature_name"; then
-                    have=$cw_have_feature . auto/have
+                    # have=$cw_have_feature . auto/have
+                    echo "have $cw_have_feature"
                 fi
             fi
         ;;
@@ -104,7 +106,8 @@ END
             cw_found=yes
 
             if test -n "$cw_feature_name"; then
-                have=$cw_have_feature . auto/have
+                # have=$cw_have_feature . auto/have
+                echo "have $cw_have_feature"
             fi
         ;;
 
