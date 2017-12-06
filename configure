@@ -28,5 +28,9 @@ fi
 
 . auto/cc/conf
 
+if [ "$CW_PLATFORM" != win32 ]; then
+    . auto/headers
+fi
+
 . auto/make
 

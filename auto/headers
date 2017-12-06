@@ -1,0 +1,13 @@
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+
+cw_include="unistd.h";      . auto/include
+cw_include="inttypes.h";    . auto/include
+cw_include="limits.h";      . auto/include
+cw_include="sys/filio.h";   . auto/include
+cw_include="sys/param.h";   . auto/include
+cw_include="sys/mount.h";   . auto/include
+cw_include="sys/statvfs.h"; . auto/include
+cw_include="crypt.h";       . auto/include
