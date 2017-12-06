@@ -1,0 +1,380 @@
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+# C types
+
+cw_type="int"; . auto/types/sizeof
+
+cw_type="long"; . auto/types/sizeof
+
+cw_type="long long"; . auto/types/sizeof
+
+cw_type="void *"; . auto/types/sizeof; cw_ptr_size=$cw_size
+cw_param=CW_PTR_SIZE; cw_value=$cw_size; . auto/types/value
+
+
+# POSIX types
+
+CW_INCLUDE_AUTO_CONFIG_H="#include \"cw_auto_config.h\""
+
+cw_type="uint32_t"; cw_types="u_int32_t"; . auto/types/typedef
+cw_type="uint64_t"; cw_types="u_int64_t"; . auto/types/typedef
+
+cw_type="sig_atomic_t"; cw_types="int"; . auto/types/typedef
+. auto/types/sizeof
+cw_param=CW_SIG_ATOMIC_T_SIZE; cw_value=$cw_size; . auto/types/value
+
+cw_type="socklen_t"; cw_types="int"; . auto/types/typedef
+
+cw_type="in_addr_t"; cw_types="uint32_t u_int32_t"; . auto/types/typedef
+
+cw_type="in_port_t"; cw_types="u_short"; . auto/types/typedef
+
+cw_type="rlim_t"; cw_types="int"; . auto/types/typedef
+
+. auto/types/uintptr_t
+
+. auto/endianness
+
+cw_type="size_t"; . auto/types/sizeof
+cw_param=CW_MAX_SIZE_T_VALUE; cw_value=$cw_max_value; . auto/types/value
+cw_param=CW_SIZE_T_LEN; cw_value=$cw_max_len; . auto/types/value
+
+cw_type="off_t"; . auto/types/sizeof
+cw_param=CW_MAX_OFF_T_VALUE; cw_value=$cw_max_value; . auto/types/value
+cw_param=CW_OFF_T_LEN; cw_value=$cw_max_len; . auto/types/value
+
+cw_type="time_t"; . auto/types/sizeof
+cw_param=CW_TIME_T_SIZE; cw_value=$cw_size; . auto/types/value
+cw_param=CW_TIME_T_LEN; cw_value=$cw_max_len; . auto/types/value
+cw_param=CW_MAX_TIME_T_VALUE; cw_value=$cw_max_value; . auto/types/value
+
+
+# syscalls, libc calls and some features
+
+
+cw_feature="AF_INET6"
+cw_feature_name="CW_HAVE_INET6"
+cw_feature_run=no
+cw_feature_incs="#include <sys/socket.h>
+                  #include <netinet/in.h>
+                  #include <arpa/inet.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="struct sockaddr_in6  sin6;
+                  sin6.sin6_family = AF_INET6;
+                  (void) sin6"
+. auto/feature
+
+
+cw_feature="setproctitle()"
+cw_feature_name="CW_HAVE_SETPROCTITLE"
+cw_feature_run=no
+cw_feature_incs="#include <stdlib.h>"
+cw_feature_path=
+cw_feature_libs=$CW_SETPROCTITLE_LIB
+cw_feature_test="setproctitle(\"test\");"
+. auto/feature
+
+
+cw_feature="pread()"
+cw_feature_name="CW_HAVE_PREAD"
+cw_feature_run=no
+cw_feature_incs=
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="char buf[1]; ssize_t n; n = pread(0, buf, 1, 0);
+                  if (n == -1) return 1"
+. auto/feature
+
+
+cw_feature="pwrite()"
+cw_feature_name="CW_HAVE_PWRITE"
+cw_feature_run=no
+cw_feature_incs=
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="char buf[1]; ssize_t n; n = pwrite(1, buf, 1, 0);
+                  if (n == -1) return 1"
+. auto/feature
+
+
+# pwritev() was introduced in FreeBSD 6 and Linux 2.6.30, glibc 2.10
+
+cw_feature="pwritev()"
+cw_feature_name="CW_HAVE_PWRITEV"
+cw_feature_run=no
+cw_feature_incs='#include <sys/uio.h>'
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="char buf[1]; struct iovec vec[1]; ssize_t n;
+                  vec[0].iov_base = buf;
+                  vec[0].iov_len = 1;
+                  n = pwritev(1, vec, 1, 0);
+                  if (n == -1) return 1"
+. auto/feature
+
+
+cw_feature="sys_nerr"
+cw_feature_name="CW_SYS_NERR"
+cw_feature_run=value
+cw_feature_incs='#include <errno.h>
+                  #include <stdio.h>'
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test='printf("%d", sys_nerr);'
+. auto/feature
+
+
+if [ $cw_found = no ]; then
+
+    # Cygiwn defines _sys_nerr
+    cw_feature="_sys_nerr"
+    cw_feature_name="CW_SYS_NERR"
+    cw_feature_run=value
+    cw_feature_incs='#include <errno.h>
+                      #include <stdio.h>'
+    cw_feature_path=
+    cw_feature_libs=
+    cw_feature_test='printf("%d", _sys_nerr);'
+    . auto/feature
+fi
+
+
+if [ $cw_found = no ]; then
+
+    # Solaris has no sys_nerr
+    cw_feature='maximum errno'
+    cw_feature_name=CW_SYS_NERR
+    cw_feature_run=value
+    cw_feature_incs='#include <errno.h>
+                      #include <string.h>
+                      #include <stdio.h>'
+    cw_feature_path=
+    cw_feature_libs=
+    cw_feature_test='int  n;
+                      char *p;
+                      for (n = 1; n < 1000; n++) {
+                          errno = 0;
+                          p = strerror(n);
+                          if (errno == EINVAL
+                              || p == NULL
+                              || strncmp(p, "Unknown error", 13) == 0)
+                          {
+                              break;
+                          }
+                      }
+                      printf("%d", n);'
+    . auto/feature
+fi
+
+
+cw_feature="localtime_r()"
+cw_feature_name="CW_HAVE_LOCALTIME_R"
+cw_feature_run=no
+cw_feature_incs="#include <time.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="struct tm t; time_t c=0; localtime_r(&c, &t)"
+. auto/feature
+
+
+cw_feature="posix_memalign()"
+cw_feature_name="CW_HAVE_POSIX_MEMALIGN"
+cw_feature_run=no
+cw_feature_incs="#include <stdlib.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="void *p; int n; n = posix_memalign(&p, 4096, 4096);
+                  if (n != 0) return 1"
+. auto/feature
+
+
+cw_feature="memalign()"
+cw_feature_name="CW_HAVE_MEMALIGN"
+cw_feature_run=no
+cw_feature_incs="#include <stdlib.h>
+                  #include <malloc.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="void *p; p = memalign(4096, 4096);
+                  if (p == NULL) return 1"
+. auto/feature
+
+
+cw_feature="mmap(MAP_ANON|MAP_SHARED)"
+cw_feature_name="CW_HAVE_MAP_ANON"
+cw_feature_run=yes
+cw_feature_incs="#include <sys/mman.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="void *p;
+                  p = mmap(NULL, 4096, PROT_READ|PROT_WRITE,
+                           MAP_ANON|MAP_SHARED, -1, 0);
+                  if (p == MAP_FAILED) return 1;"
+. auto/feature
+
+
+cw_feature='mmap("/dev/zero", MAP_SHARED)'
+cw_feature_name="CW_HAVE_MAP_DEVZERO"
+cw_feature_run=yes
+cw_feature_incs="#include <sys/mman.h>
+                  #include <sys/stat.h>
+                  #include <fcntl.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test='void *p; int  fd;
+                  fd = open("/dev/zero", O_RDWR);
+                  p = mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
+                  if (p == MAP_FAILED) return 1;'
+. auto/feature
+
+
+cw_feature="System V shared memory"
+cw_feature_name="CW_HAVE_SYSVSHM"
+cw_feature_run=yes
+cw_feature_incs="#include <sys/ipc.h>
+                  #include <sys/shm.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="int  id;
+                  id = shmget(IPC_PRIVATE, 4096, (SHM_R|SHM_W|IPC_CREAT));
+                  if (id == -1) return 1;
+                  shmctl(id, IPC_RMID, NULL);"
+. auto/feature
+
+
+cw_feature="POSIX semaphores"
+cw_feature_name="CW_HAVE_POSIX_SEM"
+cw_feature_run=yes
+cw_feature_incs="#include <semaphore.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="sem_t  sem;
+                  if (sem_init(&sem, 1, 0) == -1) return 1;
+                  sem_destroy(&sem);"
+. auto/feature
+
+
+if [ $cw_found = no ]; then
+
+    # Linux has POSIX semaphores in libpthread
+    cw_feature="POSIX semaphores in libpthread"
+    cw_feature_libs=-lpthread
+    . auto/feature
+
+    if [ $cw_found = yes ]; then
+        CORE_LIBS="$CORE_LIBS -lpthread"
+    fi
+fi
+
+
+if [ $cw_found = no ]; then
+
+    # Solaris has POSIX semaphores in librt
+    cw_feature="POSIX semaphores in librt"
+    cw_feature_libs=-lrt
+    . auto/feature
+
+    if [ $cw_found = yes ]; then
+        CORE_LIBS="$CORE_LIBS -lrt"
+    fi
+fi
+
+
+cw_feature="struct msghdr.msg_control"
+cw_feature_name="CW_HAVE_MSGHDR_MSG_CONTROL"
+cw_feature_run=no
+cw_feature_incs="#include <sys/socket.h>
+                  #include <stdio.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="struct msghdr  msg;
+                  printf(\"%d\", (int) sizeof(msg.msg_control))"
+. auto/feature
+
+
+cw_feature="ioctl(FIONBIO)"
+cw_feature_name="CW_HAVE_FIONBIO"
+cw_feature_run=no
+cw_feature_incs="#include <sys/ioctl.h>
+                  #include <stdio.h>
+                  $CW_INCLUDE_SYS_FILIO_H"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="int i = FIONBIO; printf(\"%d\", i)"
+. auto/feature
+
+
+cw_feature="struct tm.tm_gmtoff"
+cw_feature_name="CW_HAVE_GMTOFF"
+cw_feature_run=no
+cw_feature_incs="#include <time.h>
+                  #include <stdio.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="struct tm  tm; tm.tm_gmtoff = 0;
+                  printf(\"%d\", (int) tm.tm_gmtoff)"
+. auto/feature
+
+
+cw_feature="struct dirent.d_namlen"
+cw_feature_name="CW_HAVE_D_NAMLEN"
+cw_feature_run=no
+cw_feature_incs="#include <dirent.h>
+                  #include <stdio.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="struct dirent  dir; dir.d_namlen = 0;
+                  printf(\"%d\", (int) dir.d_namlen)"
+. auto/feature
+
+
+cw_feature="struct dirent.d_type"
+cw_feature_name="CW_HAVE_D_TYPE"
+cw_feature_run=no
+cw_feature_incs="#include <dirent.h>
+                  #include <stdio.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="struct dirent  dir; dir.d_type = DT_REG;
+                  printf(\"%d\", (int) dir.d_type)"
+. auto/feature
+
+
+cw_feature="sysconf(_SC_NPROCESSORS_ONLN)"
+cw_feature_name="CW_HAVE_SC_NPROCESSORS_ONLN"
+cw_feature_run=no
+cw_feature_incs=
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="sysconf(_SC_NPROCESSORS_ONLN)"
+. auto/feature
+
+
+cw_feature="openat(), fstatat()"
+cw_feature_name="CW_HAVE_OPENAT"
+cw_feature_run=no
+cw_feature_incs="#include <sys/types.h>
+                  #include <sys/stat.h>
+                  #include <fcntl.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test="struct stat sb;
+                  openat(AT_FDCWD, \".\", O_RDONLY|O_NOFOLLOW);
+                  fstatat(AT_FDCWD, \".\", &sb, AT_SYMLINK_NOFOLLOW);"
+. auto/feature
+
+
+cw_feature="getaddrinfo()"
+cw_feature_name="CW_HAVE_GETADDRINFO"
+cw_feature_run=no
+cw_feature_incs="#include <sys/types.h>
+                  #include <sys/socket.h>
+                  #include <netdb.h>"
+cw_feature_path=
+cw_feature_libs=
+cw_feature_test='struct addrinfo *res;
+                  if (getaddrinfo("localhost", NULL, NULL, &res) != 0) return 1;
+                  freeaddrinfo(res)'
+. auto/feature

@@ -34,7 +34,7 @@ fi
 
 . auto/os/conf
 
-
-
-. auto/make
+if [ "$CW_PLATFORM" != win32 ]; then
+    . auto/unix
+fi
 
