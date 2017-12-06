@@ -2,5 +2,10 @@
 # Copyright (C) Nietsnie, Inc.
 
 CW_MAKEFILE=$CW_OBJS/Makefile
+CW_MODULES_C=$CW_OBJS/cw_modules.c
 
 CW_AUTO_HEADERS_H=$CW_OBJS/cw_auto_headers.h
+CW_AUTO_CONFIG_H=$CW_OBJS/cw_auto_config.h
+
+CW_AUTOTEST=$CW_OBJS/autotest
+CW_AUTOCONF_ERR=$CW_OBJS/autoconf.err
