@@ -20,6 +20,22 @@ LINK =  $LINK
 
 END
 
+# ALL_INCS, required by the addons and by OpenWatcom C precompiled headers
+
+cw_incs=`echo $CORE_INCS $CW_OBJS \
+    | sed -e "s/  *\([^ ][^ ]*\)/$cw_regex_cont$cw_include_opt\1/g" \
+          -e "s/\//$cw_regex_dirsep/g"`
+
+cat << END                                                    >> $CW_MAKEFILE
+
+ALL_INCS = $cw_include_opt$cw_incs
+
+END
+
+
+ngx_all_srcs="$CORE_SRCS"
+
+
 # the core dependencies and include paths
 
 cw_deps=`echo $CORE_DEPS $CW_AUTO_CONFIG_H $CW_PCH \

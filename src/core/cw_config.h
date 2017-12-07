@@ -1,6 +1,8 @@
 #ifndef _CW_CONFIG_H_INCLUDED_
 #define _CW_CONFIG_H_INCLUDED_
 
+#include <cw_auto_headers.h>
+
 #if (CW_LINUX)
 #include <cw_linux_config.h>
 #endif

@@ -3,7 +3,7 @@
 # Copyright (C) Nietsnie, Inc.
 
 
-# have=CW_LINUX . auto/have_headers
+have=CW_LINUX . auto/have_headers
 
 CORE_INCS="$UNIX_INCS"
 CORE_DEPS="$UNIX_DEPS $LINUX_DEPS"

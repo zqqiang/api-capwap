@@ -16,7 +16,7 @@ CORE_DEPS="src/core/cw.h \
            src/core/cw_buf.h \
            src/core/cw_string.h \
            src/core/cw_conf_file.h \
-           src/core/cw_module.h
+           src/core/cw_module.h"
 
 CORE_SRCS="src/core/cw.c \
            src/core/cw_log.c \
@@ -27,7 +27,7 @@ CORE_SRCS="src/core/cw.c \
            src/core/cw_string.c \
            src/core/cw_connection.c \
            src/core/cw_cycle.c \
-           src/core/cw_module.c
+           src/core/cw_module.c"
 
 UNIX_INCS="$CORE_INCS $EVENT_INCS src/os/unix"
 

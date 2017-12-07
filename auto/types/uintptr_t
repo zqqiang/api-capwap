@@ -42,7 +42,7 @@ rm -rf $CW_AUTOTEST*
 
 
 if [ $found = no ]; then
-    found="uint`expr 8 \* $ngx_ptr_size`_t"
+    found="uint`expr 8 \* $cw_ptr_size`_t"
     echo ", $found used"
 
     echo "typedef $found  uintptr_t;"                   >> $CW_AUTO_CONFIG_H
