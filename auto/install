@@ -1,0 +1,27 @@
+
+
+
+
+
+# create Makefile
+
+cat << END >> Makefile
+
+build:
+	\$(MAKE) -f $CW_MAKEFILE
+
+install:
+	\$(MAKE) -f $CW_MAKEFILE install
+
+modules:
+	\$(MAKE) -f $CW_MAKEFILE modules
+
+upgrade:
+	$CW_SBIN_PATH -t
+
+	kill -USR2 \`cat $CW_PID_PATH\`
+	sleep 1
+	test -f $CW_PID_PATH.oldbin
+
+	kill -QUIT \`cat $CW_PID_PATH.oldbin\`
+END

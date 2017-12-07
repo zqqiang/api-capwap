@@ -9,3 +9,15 @@ CW_AUTO_CONFIG_H=$CW_OBJS/cw_auto_config.h
 
 CW_AUTOTEST=$CW_OBJS/autotest
 CW_AUTOCONF_ERR=$CW_OBJS/autoconf.err
+
+
+
+# create Makefile
+
+cat << END > Makefile
+
+default:    build
+
+clean:
+	rm -rf Makefile $CW_OBJS
+END

@@ -4,3 +4,51 @@
 
 
 CORE_MODULES="cw_core_module cw_conf_module"
+
+CORE_INCS="src/core"
+
+CORE_DEPS="src/core/cw.h \
+           src/core/cw_config.h \
+           src/core/cw_core.h \
+           src/core/cw_log.h \
+           src/core/cw_palloc.h \
+           src/core/cw_array.h \
+           src/core/cw_buf.h \
+           src/core/cw_string.h \
+           src/core/cw_conf_file.h \
+           src/core/cw_module.h
+
+CORE_SRCS="src/core/cw.c \
+           src/core/cw_log.c \
+           src/core/cw_palloc.c \
+           src/core/cw_array.c \
+           src/core/cw_list.c \
+           src/core/cw_buf.c \
+           src/core/cw_string.c \
+           src/core/cw_connection.c \
+           src/core/cw_cycle.c \
+           src/core/cw_module.c
+
+UNIX_INCS="$CORE_INCS $EVENT_INCS src/os/unix"
+
+UNIX_DEPS="$CORE_DEPS $EVENT_DEPS \
+            src/os/unix/cw_time.h \
+            src/os/unix/cw_alloc.h \
+            src/os/unix/cw_files.h \
+            src/os/unix/cw_channel.h \
+            src/os/unix/cw_process.h \
+            src/os/unix/cw_thread.h \
+            src/os/unix/cw_socket.h \
+            src/os/unix/cw_process_cycle.h"
+
+UNIX_SRCS="$CORE_SRCS $EVENT_SRCS \
+            src/os/unix/cw_alloc.c \
+            src/os/unix/cw_files.c \
+            src/os/unix/cw_socket.c \
+            src/os/unix/cw_channel.c \
+            src/os/unix/cw_process.c \
+            src/os/unix/cw_process_cycle.c"
+
+
+
+

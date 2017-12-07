@@ -88,11 +88,46 @@ build:	binary modules manpage
 
 binary:	$CW_OBJS${cw_dirsep}capwap$cw_binext
 
-$CW_OBJS${CW_dirsep}capwap$CW_binext:	$cw_deps$cw_spacer
+$CW_OBJS${cw_dirsep}capwap$cw_binext:	$cw_deps$cw_spacer
 	\$(LINK) $cw_long_start$cw_binout$CW_OBJS${cw_dirsep}capwap$cw_long_cont$cw_objs$cw_libs$cw_link$cw_main_link
 	$cw_rcc
 $cw_long_end
 
 modules:
 END
+
+# cw_modules.c
+
+if test -n "$CW_PCH"; then
+    cw_cc="\$(CC) $cw_compile_opt \$(CFLAGS) $cw_use_pch \$(ALL_INCS)"
+else
+    cw_cc="\$(CC) $cw_compile_opt \$(CFLAGS) \$(CORE_INCS)"
+fi
+
+cat << END                                                    >> $CW_MAKEFILE
+
+$cw_modules_obj:	\$(CORE_DEPS)$cw_cont$cw_modules_c
+	$cw_cc$cw_tab$cw_objout$cw_modules_obj$cw_tab$cw_modules_c$CW_AUX
+
+END
+
+# the core sources
+
+for cw_src in $CORE_SRCS
+do
+    cw_src=`echo $cw_src | sed -e "s/\//$cw_regex_dirsep/g"`
+    cw_obj=`echo $cw_src \
+        | sed -e "s#^\(.*\.\)cpp\\$#$cw_objs_dir\1$cw_objext#g" \
+              -e "s#^\(.*\.\)cc\\$#$cw_objs_dir\1$cw_objext#g" \
+              -e "s#^\(.*\.\)c\\$#$cw_objs_dir\1$cw_objext#g" \
+              -e "s#^\(.*\.\)S\\$#$cw_objs_dir\1$cw_objext#g"`
+
+    cat << END                                                >> $CW_MAKEFILE
+
+$cw_obj:	\$(CORE_DEPS)$cw_cont$cw_src
+	$cw_cc$cw_tab$cw_objout$cw_obj$cw_tab$cw_src$CW_AUX
+
+END
+
+done
 

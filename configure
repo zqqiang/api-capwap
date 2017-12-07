@@ -44,3 +44,4 @@ fi
 
 
 . auto/make
+. auto/install

@@ -3,6 +3,35 @@
 
 LINK="\$(CC)"
 
+MAIN_LINK=
+MODULE_LINK="-shared"
+
+cw_include_opt="-I "
+cw_compile_opt="-c"
+cw_pic_opt="-fPIC"
+cw_objout="-o "
+cw_binout="-o "
+cw_objext="o"
+cw_binext=
+cw_modext=".so"
+
+cw_long_start=
+cw_long_end=
+
+cw_regex_dirsep="\/"
+cw_dirsep='/'
+
+cw_regex_cont=' \\\
+    '
+cw_cont=' \
+    '
+cw_tab=' \
+        '
+cw_spacer=
+
+cw_long_regex_cont=$cw_regex_cont
+cw_long_cont=$cw_cont
+
 . auto/cc/name
 
 if test -n "$CFLAGS"; then
