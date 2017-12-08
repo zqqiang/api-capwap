@@ -3,7 +3,7 @@
 # Copyright (C) Nietsnie, Inc.
 
 
-# have=CW_DARWIN . auto/have_headers
+have=CW_DARWIN . auto/have_headers
 
 CORE_INCS="$UNIX_INCS"
 CORE_DEPS="$UNIX_DEPS $DARWIN_DEPS"

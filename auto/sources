@@ -49,6 +49,9 @@ UNIX_SRCS="$CORE_SRCS $EVENT_SRCS \
             src/os/unix/cw_process.c \
             src/os/unix/cw_process_cycle.c"
 
-
+DARWIN_DEPS="src/os/unix/cw_darwin_config.h"
+# DARWIN_DEPS="src/os/unix/cw_darwin_config.h src/os/unix/cw_darwin.h"
+# DARWIN_SRCS=src/os/unix/cw_darwin_init.c
+# DARWIN_SENDFILE_SRCS=src/os/unix/cw_darwin_sendfile_chain.c
 
 

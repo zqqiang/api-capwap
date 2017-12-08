@@ -5,6 +5,10 @@
 
 #if (CW_LINUX)
 #include <cw_linux_config.h>
+
+#elif (CW_DARWIN)
+#include <cw_darwin_config.h>
+
 #endif
 
 #define cw_cdecl
