@@ -166,3 +166,208 @@ CW_CPU_CACHE_LINE=
 CW_POST_CONF_MSG=
 
 opt=
+
+for option
+do
+    opt="$opt `echo $option | sed -e \"s/\(--[^=]*=\)\(.* .*\)/\1'\2'/\"`"
+
+    case "$option" in
+        -*=*) value=`echo "$option" | sed -e 's/[-_a-zA-Z0-9]*=//'` ;;
+           *) value="" ;;
+    esac
+
+    case "$option" in
+        --help)                          help=yes                   ;;
+
+        --prefix=)                       CW_PREFIX="!"             ;;
+        --prefix=*)                      CW_PREFIX="$value"        ;;
+        --sbin-path=*)                   CW_SBIN_PATH="$value"     ;;
+        --modules-path=*)                CW_MODULES_PATH="$value"  ;;
+        --conf-path=*)                   CW_CONF_PATH="$value"     ;;
+        --error-log-path=*)              CW_ERROR_LOG_PATH="$value";;
+        --pid-path=*)                    CW_PID_PATH="$value"      ;;
+        --lock-path=*)                   CW_LOCK_PATH="$value"     ;;
+        --user=*)                        CW_USER="$value"          ;;
+        --group=*)                       CW_GROUP="$value"         ;;
+
+        --crossbuild=*)                  CW_PLATFORM="$value"      ;;
+
+        --build=*)                       CW_BUILD="$value"         ;;
+        --builddir=*)                    CW_OBJS="$value"          ;;
+
+        --with-select_module)            EVENT_SELECT=YES           ;;
+        --without-select_module)         EVENT_SELECT=NONE          ;;
+        --with-poll_module)              EVENT_POLL=YES             ;;
+        --without-poll_module)           EVENT_POLL=NONE            ;;
+
+        --with-threads)                  USE_THREADS=YES            ;;
+
+        --with-file-aio)                 CW_FILE_AIO=YES           ;;
+
+        --with-ipv6)
+            CW_POST_CONF_MSG="$CW_POST_CONF_MSG
+$0: warning: the \"--with-ipv6\" option is deprecated"
+        ;;
+
+        --with-cpp_test_module)          CW_CPP_TEST=YES           ;;
+
+        --add-module=*)                  CW_ADDONS="$CW_ADDONS $value" ;;
+        --add-dynamic-module=*)          DYNAMIC_ADDONS="$DYNAMIC_ADDONS $value" ;;
+
+        --with-compat)                   CW_COMPAT=YES             ;;
+
+        --with-cc=*)                     CC="$value"                ;;
+        --with-cpp=*)                    CPP="$value"               ;;
+        --with-cc-opt=*)                 CW_CC_OPT="$value"        ;;
+        --with-ld-opt=*)                 CW_LD_OPT="$value"        ;;
+        --with-cpu-opt=*)                CPU="$value"               ;;
+        --with-debug)                    CW_DEBUG=YES              ;;
+
+        --without-pcre)                  USE_PCRE=DISABLED          ;;
+        --with-pcre)                     USE_PCRE=YES               ;;
+        --with-pcre=*)                   PCRE="$value"              ;;
+        --with-pcre-opt=*)               PCRE_OPT="$value"          ;;
+        --with-pcre-jit)                 PCRE_JIT=YES               ;;
+
+        --with-openssl=*)                OPENSSL="$value"           ;;
+        --with-openssl-opt=*)            OPENSSL_OPT="$value"       ;;
+
+        --with-md5=*)
+            CW_POST_CONF_MSG="$CW_POST_CONF_MSG
+$0: warning: the \"--with-md5\" option is deprecated"
+        ;;
+        --with-md5-opt=*)
+            CW_POST_CONF_MSG="$CW_POST_CONF_MSG
+$0: warning: the \"--with-md5-opt\" option is deprecated"
+        ;;
+        --with-md5-asm)
+            CW_POST_CONF_MSG="$CW_POST_CONF_MSG
+$0: warning: the \"--with-md5-asm\" option is deprecated"
+        ;;
+
+        --with-sha1=*)
+            CW_POST_CONF_MSG="$CW_POST_CONF_MSG
+$0: warning: the \"--with-sha1\" option is deprecated"
+        ;;
+        --with-sha1-opt=*)
+            CW_POST_CONF_MSG="$CW_POST_CONF_MSG
+$0: warning: the \"--with-sha1-opt\" option is deprecated"
+        ;;
+        --with-sha1-asm)
+            CW_POST_CONF_MSG="$CW_POST_CONF_MSG
+$0: warning: the \"--with-sha1-asm\" option is deprecated"
+        ;;
+
+        --with-zlib=*)                   ZLIB="$value"              ;;
+        --with-zlib-opt=*)               ZLIB_OPT="$value"          ;;
+        --with-zlib-asm=*)               ZLIB_ASM="$value"          ;;
+
+        --with-libatomic)                CW_LIBATOMIC=YES          ;;
+        --with-libatomic=*)              CW_LIBATOMIC="$value"     ;;
+
+        --test-build-devpoll)            CW_TEST_BUILD_DEVPOLL=YES ;;
+        --test-build-eventport)          CW_TEST_BUILD_EVENTPORT=YES ;;
+        --test-build-epoll)              CW_TEST_BUILD_EPOLL=YES   ;;
+        --test-build-solaris-sendfilev)  CW_TEST_BUILD_SOLARIS_SENDFILEV=YES ;;
+
+        *)
+            echo "$0: error: invalid option \"$option\""
+            exit 1
+        ;;
+    esac
+done
+
+
+CW_CONFIGURE="$opt"
+
+
+if [ $help = yes ]; then
+
+cat << END
+
+  --help                             print this message
+
+  --prefix=PATH                      set installation prefix
+  --sbin-path=PATH                   set capwap binary pathname
+  --modules-path=PATH                set modules path
+  --conf-path=PATH                   set capwap.conf pathname
+  --error-log-path=PATH              set error log pathname
+  --pid-path=PATH                    set capwap.pid pathname
+  --lock-path=PATH                   set capwap.lock pathname
+
+  --user=USER                        set non-privileged user for
+                                     worker processes
+  --group=GROUP                      set non-privileged group for
+                                     worker processes
+
+  --build=NAME                       set build name
+  --builddir=DIR                     set build directory
+
+  --with-select_module               enable select module
+  --without-select_module            disable select module
+  --with-poll_module                 enable poll module
+  --without-poll_module              disable poll module
+
+  --with-threads                     enable thread pool support
+
+  --with-file-aio                    enable file AIO support
+
+  --with-cpp_test_module             enable cw_cpp_test_module
+
+  --add-module=PATH                  enable external module
+  --add-dynamic-module=PATH          enable dynamic external module
+
+  --with-compat                      dynamic modules compatibility
+
+  --with-cc=PATH                     set C compiler pathname
+  --with-cpp=PATH                    set C preprocessor pathname
+  --with-cc-opt=OPTIONS              set additional C compiler options
+  --with-ld-opt=OPTIONS              set additional linker options
+  --with-cpu-opt=CPU                 build for the specified CPU, valid values:
+                                     pentium, pentiumpro, pentium3, pentium4,
+                                     athlon, opteron, sparc32, sparc64, ppc64
+
+  --without-pcre                     disable PCRE library usage
+  --with-pcre                        force PCRE library usage
+  --with-pcre=DIR                    set path to PCRE library sources
+  --with-pcre-opt=OPTIONS            set additional build options for PCRE
+  --with-pcre-jit                    build PCRE with JIT compilation support
+
+  --with-zlib=DIR                    set path to zlib library sources
+  --with-zlib-opt=OPTIONS            set additional build options for zlib
+  --with-zlib-asm=CPU                use zlib assembler sources optimized
+                                     for the specified CPU, valid values:
+                                     pentium, pentiumpro
+
+  --with-libatomic                   force libatomic_ops library usage
+  --with-libatomic=DIR               set path to libatomic_ops library sources
+
+  --with-openssl=DIR                 set path to OpenSSL library sources
+  --with-openssl-opt=OPTIONS         set additional build options for OpenSSL
+
+  --with-debug                       enable debug logging
+
+END
+
+    exit 1
+fi
+
+CW_SBIN_PATH=${CW_SBIN_PATH:-sbin/cw}
+CW_MODULES_PATH=${CW_MODULES_PATH:-modules}
+CW_CONF_PATH=${CW_CONF_PATH:-conf/cw.conf}
+CW_CONF_PREFIX=`dirname $CW_CONF_PATH`
+CW_PID_PATH=${CW_PID_PATH:-logs/cw.pid}
+CW_LOCK_PATH=${CW_LOCK_PATH:-logs/cw.lock}
+
+if [ ".$CW_ERROR_LOG_PATH" = ".stderr" ]; then
+    CW_ERROR_LOG_PATH=
+else
+    CW_ERROR_LOG_PATH=${CW_ERROR_LOG_PATH:-logs/error.log}
+fi
+
+CW_HTTP_LOG_PATH=${CW_HTTP_LOG_PATH:-logs/access.log}
+CW_HTTP_CLIENT_TEMP_PATH=${CW_HTTP_CLIENT_TEMP_PATH:-client_body_temp}
+CW_HTTP_PROXY_TEMP_PATH=${CW_HTTP_PROXY_TEMP_PATH:-proxy_temp}
+CW_HTTP_FASTCGI_TEMP_PATH=${CW_HTTP_FASTCGI_TEMP_PATH:-fastcgi_temp}
+CW_HTTP_UWSGI_TEMP_PATH=${CW_HTTP_UWSGI_TEMP_PATH:-uwsgi_temp}
+CW_HTTP_SCGI_TEMP_PATH=${CW_HTTP_SCGI_TEMP_PATH:-scgi_temp}

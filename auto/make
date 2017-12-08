@@ -7,8 +7,8 @@ mkdir -p $CW_OBJS/src/core $CW_OBJS/src/event $CW_OBJS/src/event/modules \
          $CW_OBJS/src/os/unix \
          $CW_OBJS/src/http $CW_OBJS/src/http/modules
 
-cw_objs_dir=$CW_OBJS$CW_regex_dirsep
-cw_use_pch=`echo $CW_USE_PCH | sed -e "s/\//$CW_regex_dirsep/g"`
+cw_objs_dir=$CW_OBJS$cw_regex_dirsep
+cw_use_pch=`echo $CW_USE_PCH | sed -e "s/\//$cw_regex_dirsep/g"`
 
 
 cat << END                                                     > $CW_MAKEFILE
@@ -33,7 +33,7 @@ ALL_INCS = $cw_include_opt$cw_incs
 END
 
 
-ngx_all_srcs="$CORE_SRCS"
+cw_all_srcs="$CORE_SRCS"
 
 
 # the core dependencies and include paths
@@ -78,7 +78,7 @@ else
 fi
 
 cw_deps=`echo $cw_all_objs $cw_modules_obj $cw_res $LINK_DEPS \
-    | sed -e "s/  *\([^ ][^ ]*\)/$CW_regex_cont\1/g" \
+    | sed -e "s/  *\([^ ][^ ]*\)/$cw_regex_cont\1/g" \
           -e "s/\//$cw_regex_dirsep/g"`
 
 cw_objs=`echo $cw_all_objs $cw_modules_obj \
