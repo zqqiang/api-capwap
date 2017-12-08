@@ -1,0 +1,68 @@
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+
+if [ $ZLOG != NONE ]; then
+    CORE_INCS="$CORE_INCS $ZLOG"
+
+    case "$CW_CC_NAME" in
+
+        msvc | owc | bcc)
+            have=CW_ZLIB . auto/have
+            LINK_DEPS="$LINK_DEPS $ZLOG/zlog.lib"
+            CORE_LIBS="$CORE_LIBS $ZLOG/zlog.lib"
+        ;;
+
+        icc)
+            have=CW_ZLOG . auto/have
+            LINK_DEPS="$LINK_DEPS $ZLOG/libzlog.a"
+        ;;
+
+        *)
+            have=CW_ZLOG . auto/have
+            LINK_DEPS="$LINK_DEPS $ZLOG/libzlog.a"
+            CORE_LIBS="$CORE_LIBS $ZLOG/libzlog.a"
+        ;;
+
+    esac
+
+else
+
+    if [ "$CW_PLATFORM" != win32 ]; then
+        ZLOG=NO
+
+        # FreeBSD, Solaris, Linux
+
+        cw_feature="zlog library"
+        cw_feature_name="CW_ZLOG"
+        cw_feature_run=no
+        cw_feature_incs="#include <zlog.h>"
+        cw_feature_path=
+        cw_feature_libs="-lzlog"
+        cw_feature_test="int rc = zlog_init(\"/etc/zlog.conf\"); \
+                         zlog_category_t *c = zlog_get_category(\"master\"); \
+                         zlog_info(c, \"hello, zlog\"); \
+                         zlog_fini()"
+        . auto/feature
+
+
+        if [ $cw_found = yes ]; then
+            CORE_LIBS="$CORE_LIBS $cw_feature_libs"
+            ZLOG=YES
+            cw_found=no
+        fi
+    fi
+
+    if [ $ZLOG != YES ]; then
+cat << END
+
+$0: error: the log module requires the zlog library.
+You can install the zlog library into the system, or build the zlog library
+statically from the source with capwap by using --with-zlog=<path> option.
+
+END
+        exit 1
+    fi
+
+fi

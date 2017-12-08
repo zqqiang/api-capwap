@@ -1,3 +1,5 @@
 #!/bin/bash
 
-./configure --conf-path=./conf/cw.conf
+make clean;
+./configure --conf-path=./conf/cw.conf;
+make;

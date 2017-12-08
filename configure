@@ -42,6 +42,30 @@ fi
 . auto/modules
 . auto/lib/conf
 
+case ".$CW_PREFIX" in
+    .)
+        CW_PREFIX=${CW_PREFIX:-/usr/local/capwap}
+        have=CW_PREFIX value="\"$CW_PREFIX/\"" . auto/define
+    ;;
+
+    .!)
+        CW_PREFIX=
+    ;;
+
+    *)
+        have=CW_PREFIX value="\"$CW_PREFIX/\"" . auto/define
+    ;;
+esac
+
+if [ ".$CW_CONF_PREFIX" != "." ]; then
+    have=CW_CONF_PREFIX value="\"$CW_CONF_PREFIX/\"" . auto/define
+fi
+
+have=CW_SBIN_PATH value="\"$CW_SBIN_PATH\"" . auto/define
+have=CW_CONF_PATH value="\"$CW_CONF_PATH\"" . auto/define
+have=CW_PID_PATH value="\"$CW_PID_PATH\"" . auto/define
+have=CW_LOCK_PATH value="\"$CW_LOCK_PATH\"" . auto/define
+have=CW_ERROR_LOG_PATH value="\"$CW_ERROR_LOG_PATH\"" . auto/define
 
 . auto/make
 . auto/install

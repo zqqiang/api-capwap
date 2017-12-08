@@ -22,12 +22,18 @@ CORE_SRCS="src/core/cw.c \
            src/core/cw_log.c \
            src/core/cw_palloc.c \
            src/core/cw_array.c \
-           src/core/cw_list.c \
-           src/core/cw_buf.c \
            src/core/cw_string.c \
            src/core/cw_connection.c \
            src/core/cw_cycle.c \
            src/core/cw_module.c"
+
+EVENT_MODULES="cw_events_module cw_event_core_module"
+
+EVENT_INCS="src/event src/event/modules"
+
+EVENT_DEPS="src/event/cw_event.h"
+
+EVENT_SRCS="src/event/cw_event.c"
 
 UNIX_INCS="$CORE_INCS $EVENT_INCS src/os/unix"
 

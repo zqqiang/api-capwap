@@ -1,0 +1,12 @@
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+cat << END                                                >> $NGX_MAKEFILE
+
+$ZLOG/libzog.a:	$CW_MAKEFILE
+	cd $ZLOG \\
+	&& \$(MAKE) clean \\
+	&& ./make
+
+END
