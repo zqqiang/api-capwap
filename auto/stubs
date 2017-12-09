@@ -1,0 +1,8 @@
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+
+have=CW_SUPPRESS_WARN . auto/have
+
+have=CW_SMP . auto/have

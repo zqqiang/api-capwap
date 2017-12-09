@@ -3,7 +3,7 @@
 # Copyright (C) Nietsnie, Inc.
 
 
-CORE_MODULES="cw_core_module cw_conf_module"
+CORE_MODULES="cw_core_module"
 
 CORE_INCS="src/core"
 
@@ -15,6 +15,8 @@ CORE_DEPS="src/core/cw.h \
            src/core/cw_array.h \
            src/core/cw_buf.h \
            src/core/cw_string.h \
+           src/core/cw_connection.h \
+           src/core/cw_cycle.h \
            src/core/cw_conf_file.h \
            src/core/cw_module.h"
 
@@ -25,9 +27,10 @@ CORE_SRCS="src/core/cw.c \
            src/core/cw_string.c \
            src/core/cw_connection.c \
            src/core/cw_cycle.c \
+           src/core/cw_conf_file.c \
            src/core/cw_module.c"
 
-EVENT_MODULES="cw_events_module cw_event_core_module"
+EVENT_MODULES=""
 
 EVENT_INCS="src/event src/event/modules"
 

@@ -69,3 +69,6 @@ have=CW_ERROR_LOG_PATH value="\"$CW_ERROR_LOG_PATH\"" . auto/define
 
 . auto/make
 . auto/install
+
+# STUB
+. auto/stubs
