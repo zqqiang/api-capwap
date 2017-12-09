@@ -1,0 +1,88 @@
+
+# Copyright (C) Bill Qiang
+# Copyright (C) Nietsnie, Inc.
+
+
+echo
+echo "Configuration summary"
+
+
+if [ $USE_THREADS = YES ]; then
+    echo "  + using threads"
+fi
+
+if [ $USE_PCRE = DISABLED ]; then
+    echo "  + PCRE library is disabled"
+
+else
+    case $PCRE in
+        YES)   echo "  + using system PCRE library" ;;
+        NONE)  echo "  + PCRE library is not used" ;;
+        *)     echo "  + using PCRE library: $PCRE" ;;
+    esac
+fi
+
+case $OPENSSL in
+    YES)   echo "  + using system OpenSSL library" ;;
+    NONE)  echo "  + OpenSSL library is not used" ;;
+    *)     echo "  + using OpenSSL library: $OPENSSL" ;;
+esac
+
+case $ZLIB in
+    YES)   echo "  + using system zlib library" ;;
+    NONE)  echo "  + zlib library is not used" ;;
+    *)     echo "  + using zlib library: $ZLIB" ;;
+esac
+
+case $ZLOG in
+    YES)   echo "  + using system zlog library" ;;
+    NONE)  echo "  + zlog library is not used" ;;
+    *)     echo "  + using zlog library: $ZLOG" ;;
+esac
+
+case $CW_LIBATOMIC in
+    YES)   echo "  + using system libatomic_ops library" ;;
+    NO)    ;; # not used
+    *)     echo "  + using libatomic_ops library: $CW_LIBATOMIC" ;;
+esac
+
+echo
+
+
+cat << END
+  capwap path prefix: "$CW_PREFIX"
+  capwap binary file: "$CW_SBIN_PATH"
+  capwap modules path: "$CW_MODULES_PATH"
+  capwap configuration prefix: "$CW_CONF_PREFIX"
+  capwap configuration file: "$CW_CONF_PATH"
+  capwap pid file: "$CW_PID_PATH"
+END
+
+if test -n "$CW_ERROR_LOG_PATH"; then
+    echo "  capwap error log file: \"$CW_ERROR_LOG_PATH\""
+else
+    echo "  capwap logs errors to stderr"
+fi
+
+cat << END
+  capwap http access log file: "$CW_HTTP_LOG_PATH"
+  capwap http client request body temporary files: "$CW_HTTP_CLIENT_TEMP_PATH"
+END
+
+if [ $HTTP_PROXY = YES ]; then
+    echo "  capwap http proxy temporary files: \"$CW_HTTP_PROXY_TEMP_PATH\""
+fi
+
+if [ $HTTP_FASTCGI = YES ]; then
+    echo "  capwap http fastcgi temporary files: \"$CW_HTTP_FASTCGI_TEMP_PATH\""
+fi
+
+if [ $HTTP_UWSGI = YES ]; then
+    echo "  capwap http uwsgi temporary files: \"$CW_HTTP_UWSGI_TEMP_PATH\""
+fi
+
+if [ $HTTP_SCGI = YES ]; then
+    echo "  capwap http scgi temporary files: \"$CW_HTTP_SCGI_TEMP_PATH\""
+fi
+
+echo "$CW_POST_CONF_MSG"

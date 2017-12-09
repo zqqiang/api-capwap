@@ -73,3 +73,9 @@ have=CW_ERROR_LOG_PATH value="\"$CW_ERROR_LOG_PATH\"" . auto/define
 
 # STUB
 . auto/stubs
+
+if [ ".$CW_BUILD" != "." ]; then
+    have=CW_BUILD value="\"$CW_BUILD\"" . auto/define
+fi
+
+. auto/summary
