@@ -73,7 +73,7 @@ if [ -x $CW_AUTOTEST ]; then
                 echo " found"
                 cw_found=yes
 
-                cat << END >> $NGX_AUTO_CONFIG_H
+                cat << END >> $CW_AUTO_CONFIG_H
 
 #ifndef $cw_feature_name
 #define $cw_feature_name  `$CW_AUTOTEST`
