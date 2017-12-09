@@ -123,4 +123,4 @@ else
     echo "----------"    >> $CW_AUTOCONF_ERR
 fi
 
-# rm -rf $CW_AUTOTEST*
+rm -rf $CW_AUTOTEST*

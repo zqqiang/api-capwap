@@ -63,7 +63,7 @@ END
         echo "----------"    >> $CW_AUTOCONF_ERR
     fi
 
-    # rm -rf $CW_AUTOTEST*
+    rm -rf $CW_AUTOTEST*
 
     if [ $cw_found != no ]; then
         break
