@@ -4,7 +4,7 @@
 
 
 if [ $ZLOG != NONE ]; then
-    CORE_INCS="$CORE_INCS $ZLOG"
+    CORE_INCS="$CORE_INCS $ZLOG $ZLOG/src"
 
     case "$CW_CC_NAME" in
 
@@ -21,8 +21,8 @@ if [ $ZLOG != NONE ]; then
 
         *)
             have=CW_ZLOG . auto/have
-            LINK_DEPS="$LINK_DEPS $ZLOG/libzlog.a"
-            CORE_LIBS="$CORE_LIBS $ZLOG/libzlog.a"
+            LINK_DEPS="$LINK_DEPS $ZLOG/src/libzlog.a"
+            CORE_LIBS="$CORE_LIBS $ZLOG/src/libzlog.a"
         ;;
 
     esac

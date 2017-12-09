@@ -58,7 +58,7 @@ int cw_cdecl
 main(int argc, char *const *argv)
 {
     cw_log_t *log = NULL;
-    cw_cycle_t *cycle = NULL, init_cycle = {0};
+    cw_cycle_t *cycle = NULL, init_cycle;
 
     cw_pid = cw_getpid();
 
@@ -67,6 +67,7 @@ main(int argc, char *const *argv)
         return 1;
     }
 
+    cw_memzero(&init_cycle, sizeof(cw_cycle_t));
     init_cycle.log = log;
     cw_cycle = &init_cycle;
 

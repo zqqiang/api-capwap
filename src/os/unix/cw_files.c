@@ -6,7 +6,7 @@ cw_read_file(cw_file_t *file, u_char *buf, size_t size, off_t offset)
 {
     ssize_t  n;
 
-    cw_log_debug(file->log, "read: %d, %p, %ld, %ld", file->fd, buf, size, offset);
+    cw_log_debug(file->log, "read: %d, %p, %ld, %lld", file->fd, buf, size, offset);
 
 #if (CW_HAVE_PREAD)
 

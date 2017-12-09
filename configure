@@ -68,6 +68,7 @@ have=CW_LOCK_PATH value="\"$CW_LOCK_PATH\"" . auto/define
 have=CW_ERROR_LOG_PATH value="\"$CW_ERROR_LOG_PATH\"" . auto/define
 
 . auto/make
+. auto/lib/make
 . auto/install
 
 # STUB

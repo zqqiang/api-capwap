@@ -274,6 +274,8 @@ $0: warning: the \"--with-sha1-asm\" option is deprecated"
         --test-build-epoll)              CW_TEST_BUILD_EPOLL=YES   ;;
         --test-build-solaris-sendfilev)  CW_TEST_BUILD_SOLARIS_SENDFILEV=YES ;;
 
+        --with-zlog=*)                   ZLOG="$value"              ;;
+
         *)
             echo "$0: error: invalid option \"$option\""
             exit 1
@@ -350,6 +352,8 @@ cat << END
   --with-openssl-opt=OPTIONS         set additional build options for OpenSSL
 
   --with-debug                       enable debug logging
+
+  --with-zlog=DIR                    set path to zlog library sources
 
 END
 
