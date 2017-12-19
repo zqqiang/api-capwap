@@ -16,7 +16,7 @@ if [ $ZLOG != NONE ]; then
 
         icc)
             have=CW_ZLOG . auto/have
-            LINK_DEPS="$LINK_DEPS $ZLOG/libzlog.a"
+            LINK_DEPS="$LINK_DEPS $ZLOG/src/libzlog.a"
         ;;
 
         *)

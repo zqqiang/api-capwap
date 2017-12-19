@@ -4,7 +4,7 @@
 
 cat << END                                                >> $CW_MAKEFILE
 
-$ZLOG/libzlog.a:	$CW_MAKEFILE
+$ZLOG/src/libzlog.a:	$CW_MAKEFILE
 	cd $ZLOG \\
 	&& \$(MAKE) clean \\
 	&& \$(MAKE) all
