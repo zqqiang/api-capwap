@@ -29,6 +29,14 @@ cw_core_module_init_conf(cw_cycle_t *cycle, void *conf)
 
 static cw_command_t  cw_core_commands[] = {
 
+    { cw_string("worker_processes"),
+      CW_MAIN_CONF|CW_DIRECT_CONF|CW_CONF_TAKE1,
+      cw_set_worker_processes,
+      0,
+      0,
+      NULL },
+
+      cw_null_command
 };
 
 static cw_core_module_t  cw_core_module_ctx = {
