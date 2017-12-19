@@ -27,6 +27,9 @@ typedef struct {
 
 #define cw_strlen(s)       strlen((const char *) s)
 
+/* msvc and icc7 compile strcmp() to inline loop */
+#define cw_strcmp(s1, s2)  strcmp((const char *) s1, (const char *) s2)
+
 #define cw_string_format(str) ((int)str.len), (str.data)
 
 u_char *cw_cpystrn(u_char *dst, u_char *src, size_t n);

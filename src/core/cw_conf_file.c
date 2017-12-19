@@ -4,6 +4,20 @@
 #define CW_CONF_BUFFER  4096
 
 static cw_int_t cw_conf_read_token(cw_conf_t *cf);
+static cw_int_t cw_conf_handler(cw_conf_t *cf, cw_int_t last);
+
+/* The eight fixed arguments */
+
+static cw_uint_t argument_number[] = {
+    CW_CONF_NOARGS,
+    CW_CONF_TAKE1,
+    CW_CONF_TAKE2,
+    CW_CONF_TAKE3,
+    CW_CONF_TAKE4,
+    CW_CONF_TAKE5,
+    CW_CONF_TAKE6,
+    CW_CONF_TAKE7
+};
 
 char *
 cw_conf_param(cw_conf_t *cf)
@@ -124,7 +138,6 @@ cw_conf_parse(cw_conf_t *cf, cw_str_t *filename)
         type = parse_param;
     }
 
-
     for ( ;; ) {
         rc = cw_conf_read_token(cf);
 
@@ -199,7 +212,7 @@ cw_conf_parse(cw_conf_t *cf, cw_str_t *filename)
         }
 
 
-        // rc = cw_conf_handler(cf, rc);
+        rc = cw_conf_handler(cf, rc);
 
         if (rc == CW_ERROR) {
             goto failed;
@@ -527,4 +540,145 @@ cw_conf_read_token(cw_conf_t *cf)
             }
         }
     }
+}
+
+static cw_int_t
+cw_conf_handler(cw_conf_t *cf, cw_int_t last)
+{
+    char           *rv;
+    void           *conf, **confp;
+    cw_uint_t      i, found;
+    cw_str_t      *name;
+    cw_command_t  *cmd;
+
+    name = cf->args->elts;
+
+    found = 0;
+
+    for (i = 0; cf->cycle->modules[i]; i++) {
+
+        cmd = cf->cycle->modules[i]->commands;
+        if (cmd == NULL) {
+            continue;
+        }
+
+        for ( /* void */ ; cmd->name.len; cmd++) {
+
+            if (name->len != cmd->name.len) {
+                continue;
+            }
+
+            if (cw_strcmp(name->data, cmd->name.data) != 0) {
+                continue;
+            }
+
+            found = 1;
+
+            if (cf->cycle->modules[i]->type != CW_CONF_MODULE
+                && cf->cycle->modules[i]->type != cf->module_type)
+            {
+                continue;
+            }
+
+            /* is the directive's location right ? */
+
+            if (!(cmd->type & cf->cmd_type)) {
+                continue;
+            }
+
+            if (!(cmd->type & CW_CONF_BLOCK) && last != CW_OK) {
+                cw_log_error(cf->log, 
+                             "directive \"%s\" is not terminated by \";\"",
+                             name->data);
+                return CW_ERROR;
+            }
+
+            if ((cmd->type & CW_CONF_BLOCK) && last != CW_CONF_BLOCK_START) {
+                cw_log_error(cf->log,
+                             "directive \"%s\" has no opening \"{\"",
+                             name->data);
+                return CW_ERROR;
+            }
+
+            /* is the directive's argument count right ? */
+
+            if (!(cmd->type & CW_CONF_ANY)) {
+
+                if (cmd->type & CW_CONF_FLAG) {
+
+                    if (cf->args->nelts != 2) {
+                        goto invalid;
+                    }
+
+                } else if (cmd->type & CW_CONF_1MORE) {
+
+                    if (cf->args->nelts < 2) {
+                        goto invalid;
+                    }
+
+                } else if (cmd->type & CW_CONF_2MORE) {
+
+                    if (cf->args->nelts < 3) {
+                        goto invalid;
+                    }
+
+                } else if (cf->args->nelts > CW_CONF_MAX_ARGS) {
+
+                    goto invalid;
+
+                } else if (!(cmd->type & argument_number[cf->args->nelts - 1]))
+                {
+                    goto invalid;
+                }
+            }
+
+            /* set up the directive's configuration context */
+
+            conf = NULL;
+
+            if (cmd->type & CW_DIRECT_CONF) {
+                conf = ((void **) cf->ctx)[cf->cycle->modules[i]->index];
+
+            } else if (cmd->type & CW_MAIN_CONF) {
+                conf = &(((void **) cf->ctx)[cf->cycle->modules[i]->index]);
+
+            } else if (cf->ctx) {
+                confp = *(void **) ((char *) cf->ctx + cmd->conf);
+
+                if (confp) {
+                    conf = confp[cf->cycle->modules[i]->ctx_index];
+                }
+            }
+
+            rv = cmd->set(cf, cmd, conf);
+
+            if (rv == CW_CONF_OK) {
+                return CW_OK;
+            }
+
+            if (rv == CW_CONF_ERROR) {
+                return CW_ERROR;
+            }
+
+            cw_log_error(cf->log, "\"%s\" directive %s", name->data, rv);
+
+            return CW_ERROR;
+        }
+    }
+
+    if (found) {
+        cw_log_error(cf->log, "\"%s\" directive is not allowed here", name->data);
+
+        return CW_ERROR;
+    }
+
+    cw_log_error(cf->log, "unknown directive \"%s\"", name->data);
+
+    return CW_ERROR;
+
+invalid:
+
+    cw_log_error(cf->log, "invalid number of arguments in \"%s\" directive", name->data);
+
+    return CW_ERROR;
 }

@@ -4,11 +4,40 @@
 #include <cw_config.h>
 #include <cw_core.h>
 
+/*
+ *        AAAA  number of arguments
+ *      FF      command flags
+ *    TT        command type, i.e. HTTP "location" or "server" command
+ */
+
+#define CW_CONF_NOARGS      0x00000001
+#define CW_CONF_TAKE1       0x00000002
+#define CW_CONF_TAKE2       0x00000004
+#define CW_CONF_TAKE3       0x00000008
+#define CW_CONF_TAKE4       0x00000010
+#define CW_CONF_TAKE5       0x00000020
+#define CW_CONF_TAKE6       0x00000040
+#define CW_CONF_TAKE7       0x00000080
+
+#define CW_CONF_MAX_ARGS    8
+
 #define CW_CONF_NOARGS      0x00000001
 
 #define CW_CONF_BLOCK       0x00000100
 
 #define CW_MAIN_CONF        0x01000000
+
+#define CW_CONF_ARGS_NUMBER 0x000000ff
+#define CW_CONF_BLOCK       0x00000100
+#define CW_CONF_FLAG        0x00000200
+#define CW_CONF_ANY         0x00000400
+#define CW_CONF_1MORE       0x00000800
+#define CW_CONF_2MORE       0x00001000
+
+#define CW_DIRECT_CONF      0x00010000
+
+#define CW_MAIN_CONF        0x01000000
+#define CW_ANY_CONF         0x1F000000
 
 #define CW_CONF_OK          NULL
 #define CW_CONF_ERROR       (void *) -1
