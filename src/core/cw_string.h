@@ -34,4 +34,6 @@ typedef struct {
 
 u_char *cw_cpystrn(u_char *dst, u_char *src, size_t n);
 
+cw_int_t cw_atoi(u_char *line, size_t n);
+
 #endif /* _CW_STRING_H_INCLUDED_ */

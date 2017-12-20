@@ -39,6 +39,12 @@
 #define CW_MAIN_CONF        0x01000000
 #define CW_ANY_CONF         0x1F000000
 
+#define CW_CONF_UNSET       -1
+#define CW_CONF_UNSET_UINT  (cw_uint_t) -1
+#define CW_CONF_UNSET_PTR   (void *) -1
+#define CW_CONF_UNSET_SIZE  (size_t) -1
+#define CW_CONF_UNSET_MSEC  (cw_msec_t) -1
+
 #define CW_CONF_OK          NULL
 #define CW_CONF_ERROR       (void *) -1
 

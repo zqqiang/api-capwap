@@ -45,6 +45,7 @@ typedef void (*cw_connection_handler_pt)(cw_connection_t *c);
 #include <cw_array.h>
 #include <cw_cycle.h>
 #include <cw_conf_file.h>
+#include <cw_os.h>
 
 #define LF     (u_char) '\n'
 #define CR     (u_char) '\r'

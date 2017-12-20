@@ -3,6 +3,7 @@
 #include <cw.h>
 
 static cw_int_t cw_process_options(cw_cycle_t *cycle);
+static char *cw_set_worker_processes(cw_conf_t *cf, cw_command_t *cmd, void *conf);
 
 static void *
 cw_core_module_create_conf(cw_cycle_t *cycle)
@@ -88,6 +89,10 @@ main(int argc, char *const *argv)
         return 1;
     }
 
+    if (cw_os_init(log) != CW_OK) {
+        return 1;
+    }
+
 
 
     if (cw_preinit_modules() != CW_OK) {
@@ -122,4 +127,32 @@ cw_process_options(cw_cycle_t *cycle)
     }
 
     return CW_OK;
+}
+
+static char *
+cw_set_worker_processes(cw_conf_t *cf, cw_command_t *cmd, void *conf)
+{
+    cw_str_t        *value;
+    cw_core_conf_t  *ccf;
+
+    ccf = (cw_core_conf_t *) conf;
+
+    if (ccf->worker_processes != CW_CONF_UNSET) {
+        return "is duplicate";
+    }
+
+    value = cf->args->elts;
+
+    if (cw_strcmp(value[1].data, "auto") == 0) {
+        ccf->worker_processes = cw_ncpu;
+        return CW_CONF_OK;
+    }
+
+    ccf->worker_processes = cw_atoi(value[1].data, value[1].len);
+
+    if (ccf->worker_processes == CW_ERROR) {
+        return "invalid value";
+    }
+
+    return CW_CONF_OK;
 }
