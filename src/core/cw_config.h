@@ -13,8 +13,10 @@
 
 #define cw_cdecl
 
-typedef intptr_t cw_int_t;
-typedef uintptr_t cw_uint_t;
+typedef intptr_t        cw_int_t;
+typedef uintptr_t       cw_uint_t;
+typedef intptr_t        cw_flag_t;
+
 
 #define CW_INT32_LEN   (sizeof("-2147483648") - 1)
 #define CW_INT64_LEN   (sizeof("-9223372036854775808") - 1)

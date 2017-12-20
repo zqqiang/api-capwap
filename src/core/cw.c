@@ -15,7 +15,36 @@ cw_core_module_create_conf(cw_cycle_t *cycle)
         return NULL;
     }
 
-    cw_log_debug(cycle->log, "core create conf");
+    /*
+     * set by cw_pcalloc()
+     *
+     *     ccf->pid = NULL;
+     *     ccf->oldpid = NULL;
+     *     ccf->priority = 0;
+     *     ccf->cpu_affinity_auto = 0;
+     *     ccf->cpu_affinity_n = 0;
+     *     ccf->cpu_affinity = NULL;
+     */
+
+    ccf->daemon = CW_CONF_UNSET;
+    ccf->master = CW_CONF_UNSET;
+    ccf->timer_resolution = CW_CONF_UNSET_MSEC;
+    ccf->shutdown_timeout = CW_CONF_UNSET_MSEC;
+
+    ccf->worker_processes = CW_CONF_UNSET;
+    ccf->debug_points = CW_CONF_UNSET;
+
+    ccf->rlimit_nofile = CW_CONF_UNSET;
+    ccf->rlimit_core = CW_CONF_UNSET;
+
+    // ccf->user = (cw_uid_t) CW_CONF_UNSET_UINT;
+    // ccf->group = (cw_gid_t) CW_CONF_UNSET_UINT;
+
+    if (cw_array_init(&ccf->env, cycle->pool, 1, sizeof(cw_str_t))
+        != CW_OK)
+    {
+        return NULL;
+    }
 
     return ccf;
 }
